@@ -151,10 +151,10 @@ body:has(.st-key-app-header) .stVerticalBlock.st-emotion-cache-1a7fwqm.e399r293 
 
 
 
-/* Compact map actions sit beneath Leaflet zoom controls, without a new row. */
+/* Separate custom map actions from Leaflet zoom; leave attribution visible below. */
 .st-key-map-canvas { position:relative; }
-.st-key-map-canvas [data-testid="stHtml"]:has(.map-compact-controls) {
- position:absolute; top:90px; left:12px; z-index:5; width:auto; height:auto;
+.st-key-map-canvas [data-testid="stElementContainer"]:has(.map-compact-controls) {
+ position:absolute; top:auto; left:auto; right:12px; bottom:64px; z-index:5; width:auto; height:auto;
 }
 .map-compact-controls { display:flex; flex-direction:column; gap:5px; }
 .map-compact-controls button {
