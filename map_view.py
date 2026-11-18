@@ -45,7 +45,7 @@ def map_html(case,result=None,show_prediction=True,view_revision=0):
     asset=prepared_map(case['key'])
     reference='';reference_bounds=bounds
     if asset is not None:
-        reference=f"/app/static/maps/{case['key']}.png"
+        reference=f"app/static/maps/{case['key']}.png"
         w,s,e,n=asset[1]['bounds_wgs84'];reference_bounds=[[s,w],[n,e]]
     if result is not None and show_prediction:image,image_bounds=overlay(result)
     status_message=('Nền bản đồ xung quanh chưa tải được; nền khu vực phân tích và kết quả vẫn được giữ.' if reference else 'Nền địa danh chưa tải được. Kiểm tra Internet; ranh khu vực và lớp kết quả vẫn được giữ.')
@@ -71,7 +71,13 @@ const base=L.tileLayer({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a hr
 let loaded=0;base.on('tileload',()=>{{loaded++;document.getElementById('status').style.display='none';}});
 base.on('tileerror',()=>{{if(!loaded)document.getElementById('status').style.display='block';}});
 const reference={json.dumps(reference)};
-if(reference)L.imageOverlay(reference,{json.dumps(reference_bounds)},{{interactive:false,className:'prepared-basemap'}}).addTo(map);
+if(reference){{
+ // Community Cloud serves the app under /~/+/. Resolve from its parent document,
+ // rather than the outer Cloud shell or about:srcdoc, preserving that prefix.
+ const referenceURL=new URL(reference,window.parent.document.baseURI).href;
+ L.imageOverlay(referenceURL,{json.dumps(reference_bounds)},{{interactive:false,className:'prepared-basemap'}})
+  .on('error',function(){{map.removeLayer(this);}}).addTo(map);
+}}
 L.polygon({json.dumps(case['footprint_wgs84'])},{{color:'#11636a',weight:2,fill:false,dashArray:'7 5'}}).addTo(map).bindTooltip({json.dumps(title)},{{sticky:true}});
 const image={json.dumps(image)};
 if(image)L.imageOverlay(image,{json.dumps(image_bounds)},{{interactive:false,className:'prediction-overlay'}}).addTo(map);
