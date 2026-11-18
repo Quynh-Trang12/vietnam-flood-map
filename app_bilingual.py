@@ -4,6 +4,7 @@ from pathlib import Path
 import streamlit as st
 from pipeline_rtc import catalogue, infer, load_model, model_signature, source_images, EXPORT_VERSION
 from functools import partial
+from map_view import interaction_controls
 from bilingual_support import translate, area_name, local_date, localized_map, localized_bundle, message, radar_legend
 ROOT = Path(__file__).resolve().parent
 if st.query_params.get('demo') == '1' and not st.session_state.get('client_demo_initialized'):
@@ -104,6 +105,7 @@ with tabs[0]:
             with st.container(border=True, key='map-panel', gap='xsmall'):
                 show = st.session_state.get('overlay', True)
                 with st.container(key='map-canvas', height='stretch', border=False):
+                    st.html(interaction_controls(language), unsafe_allow_javascript=True)
                     st.iframe(localized_map(case, result, show and result is not None, language), height='stretch', alt=tr('Bản đồ Thanh Hóa có địa danh, ranh khu vực khảo sát và lớp AI nghi ngập'))
                 st.html(radar_legend(language))
             with st.container(key='map-note'):

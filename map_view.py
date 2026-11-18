@@ -38,7 +38,7 @@ def colorize(warped,footprint,flood_class):
     return rgba
 
 
-def map_html(case,result=None,show_prediction=True):
+def map_html(case,result=None,show_prediction=True,view_revision=0):
     west,south,east,north=case['bounds_wgs84']
     bounds=[[south,west],[north,east]]
     image='';image_bounds=bounds
@@ -53,7 +53,7 @@ def map_html(case,result=None,show_prediction=True):
     js=(ROOT/'assets/leaflet.js').read_text()
     fonts=(ROOT/'static/fonts/fonts.css').read_text().replace('.woff2','.ttf')
     title=html.escape(f"Thanh Hóa — {case['area_name'].lower()}")
-    return f'''<!doctype html><html lang="vi"><head><meta charset="utf-8"><style>{fonts}
+    return f'''<!doctype html><html lang="vi" data-view-revision="{int(view_revision)}"><head><meta charset="utf-8"><style>{fonts}
 {css}
 html,body{{margin:0;height:100%;font-family:"Be Vietnam Pro",sans-serif}}#map{{height:100%;min-height:0;background:#e8eeec}}
 .leaflet-container{{font:13px/1.5 "Be Vietnam Pro",sans-serif}}.map-note{{background:white;padding:8px 12px;color:#193c44;max-width:240px;border-radius:4px}}
@@ -63,6 +63,10 @@ html,body{{margin:0;height:100%;font-family:"Be Vietnam Pro",sans-serif}}#map{{h
 <script>{js}</script><script>
 const map=L.map('map',{{scrollWheelZoom:false}}).fitBounds({json.dumps(bounds)},{{padding:[24,24]}});
 window.demoMap=map;
+window.addEventListener('message',event=>{{
+ if(event.source===window.parent && event.origin===window.parent.location.origin && event.data?.type==='flood-map-reset')
+  map.fitBounds({json.dumps(bounds)},{{padding:[24,24],animate:false}});
+}});
 const base=L.tileLayer({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
 let loaded=0;base.on('tileload',()=>{{loaded++;document.getElementById('status').style.display='none';}});
 base.on('tileerror',()=>{{if(!loaded)document.getElementById('status').style.display='block';}});
@@ -75,3 +79,27 @@ L.control.scale({{imperial:false,position:'bottomleft'}}).addTo(map);
 const note=L.control({{position:'topright'}});note.onAdd=()=>{{const el=L.DomUtil.create('div','map-note');el.textContent={json.dumps(title)};return el;}};note.addTo(map);
 window.demoMapReady=true;
 </script></body></html>'''
+
+
+def interaction_controls(language):
+    pan='Bật/tắt kéo bản đồ' if language=='vi' else 'Toggle map interaction'
+    reset='Về khu vực phân tích' if language=='vi' else 'Reset to analysis area'
+    return f'''<div class="map-compact-controls">
+<button type="button" class="map-pan-control" title="{pan}" aria-label="{pan}" aria-pressed="false">
+
+</button>
+<button type="button" class="map-reset-control" title="{reset}" aria-label="{reset}">
+
+</button></div>
+<script>
+(() => {{
+ const root=document.querySelector('.map-compact-controls');
+ if(!root)return;
+ const pan=root.querySelector('.map-pan-control');
+ pan.onclick=()=>{{const on=pan.getAttribute('aria-pressed')==='true';pan.setAttribute('aria-pressed',String(!on));}};
+ root.querySelector('.map-reset-control').onclick=()=>{{
+  const frame=root.closest('.st-key-map-canvas').querySelector('iframe');
+  frame?.contentWindow.postMessage({{type:'flood-map-reset'}},location.origin);
+ }};
+}})();
+</script>'''

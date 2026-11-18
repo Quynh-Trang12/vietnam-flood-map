@@ -496,6 +496,13 @@ RTC_MESSAGES['packaging_map'] = ('Đang tạo ảnh bản đồ và gói tải x
 
 EN['Phóng to hoặc kéo bản đồ để nhận biết địa điểm. Khu vực phân tích dùng nền tham chiếu đã chuẩn bị; bản đồ xung quanh cần Internet. © OpenStreetMap / OpenStreetMap France.'] = 'Zoom or drag the map to identify locations. The analysis area uses a prepared reference background; the surrounding map requires Internet access. © OpenStreetMap / OpenStreetMap France.'
 
+RTC_MESSAGES.update({
+    'map_interaction': ('Tương tác bản đồ', 'Interact with map'),
+    'map_reset': ('Về phạm vi phân tích', 'Reset to analysis area'),
+    'map_scroll_hint': ('Vuốt trên bản đồ để cuộn trang. Bật “Tương tác bản đồ” khi muốn kéo hoặc phóng to bản đồ.', 'Swipe over the map to scroll the page. Turn on “Interact with map” to pan or zoom the map.'),
+    'map_interaction_hint': ('Đang tương tác bản đồ. Tắt công tắc để vuốt cuộn trang; bấm “Về phạm vi phân tích” nếu kéo bản đồ đi xa.', 'Map interaction is on. Turn it off to swipe-scroll the page; select “Reset to analysis area” if you pan too far.')
+})
+
 def translate(text,language):
     return EN.get(text,text) if language=='en' else text
 
@@ -506,8 +513,8 @@ def local_date(value,language):
     if language=='vi':return value
     return datetime.strptime(value,'%d/%m/%Y %H:%M').strftime('%d %b %Y %H:%M')
 
-def localized_map(case,result,show_prediction,language):
-    markup=map_html(case,result,show_prediction)
+def localized_map(case,result,show_prediction,language,view_revision=0):
+    markup=map_html(case,result,show_prediction,view_revision)
     if language=='en':
         markup=markup.replace('Nền bản đồ xung quanh chưa tải được; nền khu vực phân tích và kết quả vẫn được giữ.', 'The surrounding basemap could not load; the analysis-area background and prediction are retained.')
     if language=='en':

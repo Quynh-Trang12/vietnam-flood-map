@@ -149,12 +149,31 @@ body:has(.st-key-app-header) .stVerticalBlock.st-emotion-cache-1a7fwqm.e399r293 
  font-size:.875rem; line-height:1.5; margin:0;
 }
 
-/* Community Cloud owner controls are separate from the app's sidebar controls. */
-body:has(.st-key-app-header) [data-testid="stAppViewerBadge"],
-body:has(.st-key-app-header) [data-testid="stManageAppButton"],
-body:has(.st-key-app-header) [data-testid="stAppManageButton"],
-body:has(.st-key-app-header) button[aria-label="Manage app" i],
-body:has(.st-key-app-header) a[aria-label="Manage app" i],
-body:has(.st-key-app-header) [class*="viewerBadge_container"] {
- display:none !important;
+
+
+/* Compact map actions sit beneath Leaflet zoom controls, without a new row. */
+.st-key-map-canvas { position:relative; }
+.st-key-map-canvas [data-testid="stHtml"]:has(.map-compact-controls) {
+ position:absolute; top:90px; left:12px; z-index:5; width:auto; height:auto;
 }
+.map-compact-controls { display:flex; flex-direction:column; gap:5px; }
+.map-compact-controls button {
+ display:flex; align-items:center; justify-content:center; width:34px; height:34px;
+ padding:6px; background:#fff; color:#172b40; border:1px solid #87949d;
+ border-radius:4px; cursor:pointer; box-shadow:0 1px 4px #0002;
+}
+.map-compact-controls button:hover { background:#e9f3f4; }
+.map-compact-controls button:focus-visible { outline:3px solid #087f8c; outline-offset:2px; }
+.map-compact-controls button[aria-pressed="true"] { background:#087f8c; color:#fff; }
+
+.map-pan-control { display:none !important; }
+@media(max-width:768px), (pointer:coarse) {
+ .map-pan-control { display:flex !important; }
+ .map-compact-controls button { width:40px; height:40px; }
+ .st-key-map-canvas:has(.map-pan-control[aria-pressed="false"]) iframe { pointer-events:none; }
+ .st-key-map-canvas { touch-action:pan-y; }
+}
+
+.map-compact-controls button::before { content:""; width:22px; height:22px; display:block; background:currentColor; mask-size:contain; mask-repeat:no-repeat; mask-position:center; }
+.map-pan-control::before { mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20aria-hidden%3D%22true%22%3E%3Cpath%20d%3D%22M8%2013V5a1.5%201.5%200%200%201%203%200v6-8a1.5%201.5%200%200%201%203%200v8-5a1.5%201.5%200%200%201%203%200v6-3a1.5%201.5%200%200%201%203%200v7c0%204-2%206-6%206h-2c-2%200-3-1-4-3l-4-5a1.5%201.5%200%200%201%202-2Z%22%2F%3E%3C%2Fsvg%3E"); }
+.map-reset-control::before { mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20aria-hidden%3D%22true%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%227%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%222%22%2F%3E%3Cpath%20d%3D%22M12%201v5m0%2012v5M1%2012h5m12%200h5%22%2F%3E%3C%2Fsvg%3E"); }

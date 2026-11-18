@@ -32,24 +32,24 @@
       "bytes": 3791
     },
     "ui_bilingual.css": {
-      "sha256": "f1b276f4c6f6ae567f8bb51e83eda57e1c6c599cc3fe6da12bb8db0c297f3c42",
-      "bytes": 9857
+      "sha256": "e1980d6219c3b3288883cea9468fd3f582ce1b6cc1148b31f3a9cdeb1cd00df5",
+      "bytes": 11699
     },
     "map_view.py": {
-      "sha256": "f2a9ea37b0e70aa2e23af37f012c1d8606f65a0fa2817d725a0ceafc1dc42cd9",
-      "bytes": 4972
+      "sha256": "f49316d4baff397ca355d53a2bbc5d4103e995797c2a309a4d0c4e8f889604ad",
+      "bytes": 6255
     },
     "map_export.py": {
       "sha256": "d1c047897f6e17945fc23445700d3f7810196eafa8030c98bce931a3726bd39a",
       "bytes": 10450
     },
     "app_bilingual.py": {
-      "sha256": "dbb27f4c1ed13f867ce85d68551043d343cec03128d04504199fc7e0395069a8",
-      "bytes": 13413
+      "sha256": "6b29cf6148df214bc62e41a300fc4a861e6623aa8acb6e042d01e252576436e3",
+      "bytes": 13545
     },
     "bilingual_support.py": {
-      "sha256": "9607094d5f6465ca4414bcf15721265473effe20ba5ff0b35d559c59ee770548",
-      "bytes": 75032
+      "sha256": "6dfad7a4615525723947139d8ce6f089526c6767692d0b21cfabae0e9a19c89b",
+      "bytes": 75790
     },
     "pipeline_rtc.py": {
       "sha256": "0b2701a4b96385542a2214221534158170921fc1438027d2669a012acaa469ec",
