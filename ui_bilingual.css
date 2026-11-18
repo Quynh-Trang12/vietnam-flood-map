@@ -1,12 +1,13 @@
 /* Native theme colors/fonts are set in .streamlit/config.toml. */
 :root { --fm-ink:#172b40; --fm-muted:#53697b; --fm-line:#dce5ed; --fm-teal:#087f8c; }
 ::selection { background:#bce9e6; color:#102d43; }
-/* Hide only menu/deployment controls. Do not hide stToolbar itself:
+/* Hide menu, deployment and host-injected Share controls. Do not hide stToolbar itself:
    that shared wrapper also contains the Expand sidebar button. */
 body:has(.st-key-app-header) header[data-testid="stHeader"] { height:0 !important; min-height:0; background:transparent; pointer-events:none; }
 body:has(.st-key-app-header) [data-testid="stMainMenu"],
 body:has(.st-key-app-header) [data-testid="stMainMenuButton"],
 body:has(.st-key-app-header) [data-testid="stAppDeployButton"],
+body:has(.st-key-app-header) [data-testid="stToolbarActions"],
 body:has(.st-key-app-header) [data-testid="stStatusWidget"] { display:none !important; }
 body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"] { pointer-events:auto; position:fixed; top:176px; left:0; background:transparent; color:#53697b; border-radius:0 .4rem .4rem 0; opacity:.55; }
 body:has(.st-key-app-header) .stMainBlockContainer { padding:1rem 1.5rem 1rem; }
