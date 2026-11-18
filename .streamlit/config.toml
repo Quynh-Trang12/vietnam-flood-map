@@ -1,0 +1,102 @@
+[global]
+developmentMode = false
+
+# shadcn/ui-inspired Streamlit Theme
+# Beautifully designed components aesthetic
+# Minimal, accessible, elegant with neutral palette
+
+[theme]
+base = "light"
+primaryColor = "#087F8C"
+backgroundColor = "#F4F7FA"
+secondaryBackgroundColor = "#FFFFFF"
+codeBackgroundColor = "#EAF0F5"
+textColor = "#172B40"
+linkColor = "#087F8C"
+borderColor = "#DCE5ED"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "0.65rem"
+buttonRadius = "0.6rem"
+codeFontSize = "0.875rem"
+codeTextColor = "#087F8C"
+baseFontSize = 16
+baseFontWeight = 400
+headingFontSizes = ["28px", "24px", "20px", "18px", "16px", "14px"]
+headingFontWeights = [600, 600, 600, 600, 600, 600]
+linkUnderline = true
+chartCategoricalColors = ["#087F8C", "#71717A", "#A1A1AA", "#D4D4D8", "#3B82F6", "#EF4444", "#22C55E"]
+
+# shadcn zinc palette
+grayColor = "#71717A"
+blueColor = "#3B82F6"
+greenColor = "#22C55E"
+redColor = "#EF4444"
+yellowColor = "#EAB308"
+orangeColor = "#F97316"
+violetColor = "#8B5CF6"
+
+dataframeBorderColor = "#DCE5ED"
+dataframeHeaderBackgroundColor = "#FFFFFF"
+
+font = "Be Vietnam Pro, sans-serif"
+headingFont = "Be Vietnam Pro, sans-serif"
+codeFont = "monospace"
+paddingTop = "0.25rem"
+paddingBottom = "0.4rem"
+metricValueFontSize = "2rem"
+metricValueFontWeight = 600
+
+[theme.sidebar]
+backgroundColor = "#112D43"
+secondaryBackgroundColor = "#1C4057"
+textColor = "#F0F6FA"
+borderColor = "#35586E"
+primaryColor = "#39D1C3"
+linkColor = "#74E1D7"
+codeBackgroundColor = "#1C4057"
+codeTextColor = "#F0F6FA"
+font = "Be Vietnam Pro, sans-serif"
+headingFont = "Be Vietnam Pro, sans-serif"
+headingFontSizes = ["24px", "21px", "18px", "16px", "15px", "14px"]
+paddingTop = "0.25rem"
+paddingBottom = "0.5rem"
+
+[client]
+toolbarMode = "viewer"
+showSidebarNavigation = false
+
+[server]
+headless = true
+address = "0.0.0.0"
+port = 8501
+enableStaticServing = true
+fileWatcherType = "none"
+runOnSave = false
+
+[browser]
+gatherUsageStats = false
+
+[[theme.fontFaces]]
+family = "Be Vietnam Pro"
+url = "app/static/fonts/be-vietnam-pro-0.ttf"
+weight = "400"
+style = "normal"
+
+[[theme.fontFaces]]
+family = "Be Vietnam Pro"
+url = "app/static/fonts/be-vietnam-pro-1.ttf"
+weight = "500"
+style = "normal"
+
+[[theme.fontFaces]]
+family = "Be Vietnam Pro"
+url = "app/static/fonts/be-vietnam-pro-2.ttf"
+weight = "600"
+style = "normal"
+
+[[theme.fontFaces]]
+family = "Be Vietnam Pro"
+url = "app/static/fonts/be-vietnam-pro-3.ttf"
+weight = "700"
+style = "normal"

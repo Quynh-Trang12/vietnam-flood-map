@@ -1,0 +1,16 @@
+{
+  "grids": {
+    "d2b10659ad8c510258e7ec6cba4e68f35eb8cff11ac1cf1ff9aff9ca65f3e291": {
+      "sha256": "97bcd02c83f184f1c42e6c3dbb5aae011dfd096831ee48f55ca1462068c3e2bb",
+      "file": "areas-d2b10659ad8c510258e7ec6cba4e68f35eb8cff11ac1cf1ff9aff9ca65f3e291.npy"
+    },
+    "c8472a9c06f5b54044dbc021415da28c5c21e245ced5bc05f12f514df1db520d": {
+      "sha256": "ce47305c4e1db9fe70497f191430f2825b4b22e09eb133d046aed6e296325057",
+      "file": "areas-c8472a9c06f5b54044dbc021415da28c5c21e245ced5bc05f12f514df1db520d.npy"
+    },
+    "529b75dcfb9da77def0ccb5f3d8f2ecef85bf6dbd0a3f2c7dd53b0b9c37bf903": {
+      "sha256": "9006eef03167e41d7b437677b29fe9176aefe8ae1d8b681cb72a2021e7c9ad90",
+      "file": "areas-529b75dcfb9da77def0ccb5f3d8f2ecef85bf6dbd0a3f2c7dd53b0b9c37bf903.npy"
+    }
+  }
+}

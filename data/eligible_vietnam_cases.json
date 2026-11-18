@@ -1,0 +1,206 @@
+[
+  {
+    "key": "EMSR754-8-0",
+    "event_id": "EMSR754",
+    "event_name": "Mưa lũ tháng 9/2024",
+    "country": "Việt Nam",
+    "place": "Thanh Hóa",
+    "area_name": "Phía tây nam",
+    "pre_file": "EMSR754-8-0_s1rtc_pre_20240831T225139.tif",
+    "post_file": "EMSR754-8-0_s1rtc_post_20240912T225139.tif",
+    "pre_utc": "2024-08-31T22:51:39+00:00",
+    "post_utc": "2024-09-12T22:51:39+00:00",
+    "pre_local": "01/09/2024 05:51",
+    "post_local": "13/09/2024 05:51",
+    "gap_days": 12.0,
+    "common_valid_fraction": 0.9999456405639648,
+    "bounds_wgs84": [
+      105.7008422885829,
+      19.723851510578665,
+      105.79901751394534,
+      19.816791255260338
+    ],
+    "footprint_wgs84": [
+      [
+        19.72426014663219,
+        105.7008422885829
+      ],
+      [
+        19.723851510578665,
+        105.79855656927234
+      ],
+      [
+        19.81638054638452,
+        105.79901751394534
+      ],
+      [
+        19.816791255260338,
+        105.70124684243976
+      ]
+    ],
+    "source_revision": "15db1cc0babbe3e570aa9fb582823c533504c971",
+    "source_version": "GEOID-Flood v1.1",
+    "source_products": [
+      "S1A_IW_GRDH_1SDV_20240831T225139_20240831T225204_055463_06C40A_F7DA_COG",
+      "S1A_IW_GRDH_1SDV_20240912T225139_20240912T225204_055638_06CAF6_92BE_COG"
+    ],
+    "input_sha256": {
+      "EMSR754-8-0_s1rtc_pre_20240831T225139.tif": "cb79fedd80cba0c095f132cdf0c89816dd913a2e230b3d2c44faf0ba72057a36",
+      "EMSR754-8-0_s1rtc_post_20240912T225139.tif": "f562fb0a560a123e13d5d418a798a043a8bc0ccb1c2e3f18c2b6d9e6317fe012"
+    },
+    "admission": "passed_input_qa",
+    "evaluation_role": "EMSR754 exposed development demo; excluded from independent confirmation",
+    "checks": [
+      "same VV/VH channel order",
+      "source product dates and same relative orbit",
+      "matching geographic grids",
+      "decoded finite positive common SAR coverage >99.8%",
+      "pre image precedes September event; 12-day pair"
+    ],
+    "caveats": [
+      "Validation metrics are not accuracy on this Vietnam tile."
+    ],
+    "optical_local": "10/08/2024 10:25",
+    "deployed_inputs": {
+      "sar": "resources/inputs/EMSR754-8-0_s1rtc_post_20240912T225139.tif",
+      "optical": "resources/inputs/EMSR754-8-0_s2l2a_pre_20240810T032519.tif",
+      "cloud": "resources/inputs/EMSR754-8-0_cloudmask_pre_20240810T032519.tif"
+    }
+  },
+  {
+    "key": "EMSR754-8-1",
+    "event_id": "EMSR754",
+    "event_name": "Mưa lũ tháng 9/2024",
+    "country": "Việt Nam",
+    "place": "Thanh Hóa",
+    "area_name": "Phía tây bắc",
+    "pre_file": "EMSR754-8-1_s1rtc_pre_20240831T225139.tif",
+    "post_file": "EMSR754-8-1_s1rtc_post_20240912T225139.tif",
+    "pre_utc": "2024-08-31T22:51:39+00:00",
+    "post_utc": "2024-09-12T22:51:39+00:00",
+    "pre_local": "01/09/2024 05:51",
+    "post_local": "13/09/2024 05:51",
+    "gap_days": 12.0,
+    "common_valid_fraction": 0.9989013671875,
+    "bounds_wgs84": [
+      105.70124684243976,
+      19.81638054638451,
+      105.79948106503561,
+      19.90932139801288
+    ],
+    "footprint_wgs84": [
+      [
+        19.816791255260334,
+        105.70124684243976
+      ],
+      [
+        19.81638054638451,
+        105.79901751394534
+      ],
+      [
+        19.90890861399544,
+        105.79948106503561
+      ],
+      [
+        19.90932139801288,
+        105.70165368387235
+      ]
+    ],
+    "source_revision": "15db1cc0babbe3e570aa9fb582823c533504c971",
+    "source_version": "GEOID-Flood v1.1",
+    "source_products": [
+      "S1A_IW_GRDH_1SDV_20240831T225139_20240831T225204_055463_06C40A_F7DA_COG",
+      "S1A_IW_GRDH_1SDV_20240912T225139_20240912T225204_055638_06CAF6_92BE_COG"
+    ],
+    "input_sha256": {
+      "EMSR754-8-1_s1rtc_pre_20240831T225139.tif": "7eaa2c1f9cfd80bd6af1f28f4604bf1c6eaa93b8eec6489e2610e0e417ecdf0a",
+      "EMSR754-8-1_s1rtc_post_20240912T225139.tif": "0cbc60376e64efbc233dc105903141dde8dea2b399fb98ecb5f71b3c90e2b3c9"
+    },
+    "admission": "passed_input_qa",
+    "evaluation_role": "EMSR754 exposed development demo; excluded from independent confirmation",
+    "checks": [
+      "same VV/VH channel order",
+      "source product dates and same relative orbit",
+      "matching geographic grids",
+      "decoded finite positive common SAR coverage >99.8%",
+      "pre image precedes September event; 12-day pair"
+    ],
+    "caveats": [
+      "Validation metrics are not accuracy on this Vietnam tile."
+    ],
+    "optical_local": "10/08/2024 10:25",
+    "deployed_inputs": {
+      "sar": "resources/inputs/EMSR754-8-1_s1rtc_post_20240912T225139.tif",
+      "optical": "resources/inputs/EMSR754-8-1_s2l2a_pre_20240810T032519.tif",
+      "cloud": "resources/inputs/EMSR754-8-1_cloudmask_pre_20240810T032519.tif"
+    }
+  },
+  {
+    "key": "EMSR754-8-3",
+    "event_id": "EMSR754",
+    "event_name": "Mưa lũ tháng 9/2024",
+    "country": "Việt Nam",
+    "place": "Thanh Hóa",
+    "area_name": "Phía đông bắc",
+    "pre_file": "EMSR754-8-3_s1rtc_pre_20240831T225139.tif",
+    "post_file": "EMSR754-8-3_s1rtc_post_20240912T225139.tif",
+    "pre_utc": "2024-08-31T22:51:39+00:00",
+    "post_utc": "2024-09-12T22:51:39+00:00",
+    "pre_local": "01/09/2024 05:51",
+    "post_local": "13/09/2024 05:51",
+    "gap_days": 12.0,
+    "common_valid_fraction": 0.999455451965332,
+    "bounds_wgs84": [
+      105.79901751394534,
+      19.815916320716997,
+      105.89730583287434,
+      19.90890861399544
+    ],
+    "footprint_wgs84": [
+      [
+        19.81638054638451,
+        105.79901751394534
+      ],
+      [
+        19.815916320716997,
+        105.89678557904169
+      ],
+      [
+        19.90844204280076,
+        105.89730583287434
+      ],
+      [
+        19.90890861399544,
+        105.7994810650356
+      ]
+    ],
+    "source_revision": "15db1cc0babbe3e570aa9fb582823c533504c971",
+    "source_version": "GEOID-Flood v1.1",
+    "source_products": [
+      "S1A_IW_GRDH_1SDV_20240831T225139_20240831T225204_055463_06C40A_F7DA_COG",
+      "S1A_IW_GRDH_1SDV_20240912T225139_20240912T225204_055638_06CAF6_92BE_COG"
+    ],
+    "input_sha256": {
+      "EMSR754-8-3_s1rtc_pre_20240831T225139.tif": "841184ccacb662267c3debc4047cb24979872079c6c0c8e3cf11d17a42feabe9",
+      "EMSR754-8-3_s1rtc_post_20240912T225139.tif": "f79797f8376540f12f39dfd68d6e9323d46fdb188296eff51ab68be5db989ae1"
+    },
+    "admission": "passed_input_qa",
+    "evaluation_role": "EMSR754 exposed development demo; excluded from independent confirmation",
+    "checks": [
+      "same VV/VH channel order",
+      "source product dates and same relative orbit",
+      "matching geographic grids",
+      "decoded finite positive common SAR coverage >99.8%",
+      "pre image precedes September event; 12-day pair"
+    ],
+    "caveats": [
+      "Validation metrics are not accuracy on this Vietnam tile."
+    ],
+    "optical_local": "10/08/2024 10:25",
+    "deployed_inputs": {
+      "sar": "resources/inputs/EMSR754-8-3_s1rtc_post_20240912T225139.tif",
+      "optical": "resources/inputs/EMSR754-8-3_s2l2a_pre_20240810T032519.tif",
+      "cloud": "resources/inputs/EMSR754-8-3_cloudmask_pre_20240810T032519.tif"
+    }
+  }
+]

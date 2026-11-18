@@ -1,0 +1,149 @@
+/* Native theme colors/fonts are set in .streamlit/config.toml. */
+:root { --fm-ink:#172b40; --fm-muted:#53697b; --fm-line:#dce5ed; --fm-teal:#087f8c; }
+::selection { background:#bce9e6; color:#102d43; }
+/* Hide only menu/deployment controls. Do not hide stToolbar itself:
+   that shared wrapper also contains the Expand sidebar button. */
+body:has(.st-key-app-header) header[data-testid="stHeader"] { height:0 !important; min-height:0; background:transparent; pointer-events:none; }
+body:has(.st-key-app-header) [data-testid="stMainMenu"],
+body:has(.st-key-app-header) [data-testid="stMainMenuButton"],
+body:has(.st-key-app-header) [data-testid="stAppDeployButton"],
+body:has(.st-key-app-header) [data-testid="stStatusWidget"] { display:none !important; }
+body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"] { pointer-events:auto; position:fixed; top:176px; left:0; background:transparent; color:#53697b; border-radius:0 .4rem .4rem 0; opacity:.55; }
+body:has(.st-key-app-header) .stMainBlockContainer { padding:1rem 1.5rem 1rem; }
+/* An edge handle stays clear of the title and remains discoverable without hover. */
+body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"]:hover,
+body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"]:focus-within { opacity:1; background:#e0f2f1; color:#087f8c; }
+@media (hover:none) {
+ body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"] { opacity:1; background:#e0f2f1; }
+}
+/* Equal tracks keep translated area names aligned in both languages. */
+:is(.st-key-area_vi,.st-key-area_en), :is(.st-key-area_vi,.st-key-area_en) [data-testid="stButtonGroup"] { width:100%; }
+:is(.st-key-area_vi,.st-key-area_en) [role="radiogroup"] { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.5rem; }
+:is(.st-key-area_vi,.st-key-area_en) [role="radiogroup"] > * { width:100%; min-width:0; margin:0; justify-content:center; }
+
+.st-key-app-header { padding:0 0 .2rem; margin:0; border:0; }
+.st-key-app-header h1 { line-height:1.4; margin:0; padding:0; }
+.workspace-subtitle { color:#53697b; font-size:.875rem; line-height:1.6; }
+.st-key-title-block { gap:1rem; }
+/* The active tab underline is the only rule in the title/navigation area. */
+.st-key-workspace-tab [role="tablist"] { border-bottom:0; }
+.st-key-workspace-tab [data-baseweb="tab-border"] { display:none; }
+.st-key-brand h2 { padding:0 0 0.8rem 0; letter-spacing:-.025em; }
+.st-key-sidebar-layout { gap:1rem; }
+.st-key-sidebar-scope { margin-top:.5rem; gap:1rem; }
+.st-key-sidebar-dates { padding:.1rem 0; }
+.observation-dates { display:block; margin:0; }
+.observation-dates dt { color:#b9cedb; font-size:.875rem; line-height:1.6; margin:0 0 .3rem; }
+.observation-dates dt:not(:first-child) { margin-top:1rem; }
+.observation-dates dd { color:#f0f6fa; margin:0; font-size:.94rem; font-weight:500; line-height:1.6; }
+.observation-dates small { color:#b9cedb; font-size:.75rem; margin-left:.4rem; }
+.st-key-sidebar-note { padding-top:.8rem; border-top:1px solid #35586e; gap:.5rem; }
+.st-key-sidebar-note p { color:#b9cedb !important; font-size:.875rem; line-height:1.65; margin:.3rem 0; }
+.st-key-sidebar-note strong { color:#f0f6fa; }
+.st-key-analyze button { color:#102d43 !important; font-weight:600; min-height:44px; }
+.st-key-analyze button p, .st-key-analyze button span { color:inherit; }
+.st-key-map-panel, .st-key-results-panel { background:#fff; }
+.st-key-map-toolbar { padding:.15rem .2rem; }
+.st-key-map-panel iframe { display:block; border:0; border-radius:.4rem; }
+.st-key-map-panel { padding: calc(-1px + 0.8rem); }
+.st-key-map-canvas { height:clamp(480px, calc(100dvh - 270px), 760px) !important; min-height:0; flex:none; }
+.map-legend { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:.5rem 1rem; padding:.55rem .2rem .2rem; color:#3b5264; font-size:.82rem; line-height:1.65; }
+.map-legend > span { display:flex; align-items:flex-start; gap:.4rem; min-width:0; }
+.map-legend i { display:inline-block; flex-shrink:0; margin-top:.28rem; width:.7rem; height:.7rem; background:#06b6d4; border-radius:2px; }
+.map-legend .extent { background:none; width:.9rem; border:1px dashed #11636a; }
+.legend-note { margin:.3rem .2rem 0; color:#3b5264; font-size:.82rem; line-height:1.65; }
+.st-key-results-panel h3 { padding-top:.1rem; font-size:1.05rem; line-height:1.5; }
+.st-key-result-area { padding:.3rem 0; gap:.5rem; }
+.st-key-result-area p { color:#53697b !important; }
+.st-key-result-notes p { color:#53697b; font-size:.875rem; line-height:1.65; }
+.st-key-map-note p, .st-key-workspace-footer p { color:#53697b !important; font-size:.82rem; line-height:1.65; margin-bottom:0; }
+.st-key-workspace-footer { padding:1rem 0 1.5rem; }
+.st-key-workspace-footer .claim-text { color:#53697b; font-size:.875rem; line-height:1.7; margin:0; max-width:90ch; }
+.st-key-report-notes { width:100%; max-width:none; }
+.mobile-scope-hint { display:none; }
+.st-emotion-cache-1rmjxbq { height: 2.3rem; }
+@media(max-width:640px) {
+ body:has(.st-key-app-header) .stMainBlockContainer { padding:3.5rem 1rem 1rem; }
+ .st-key-app-header h1 { font-size:1.5rem; }
+ .mobile-scope-hint { display:block; margin:.5rem 0 0; font-size:.875rem; line-height:1.6; color:#53697b; }
+ .st-key-map-canvas { height:440px !important; }
+ .map-legend { font-size:.8rem; gap:.5rem .8rem; }
+}
+@media(prefers-reduced-motion:no-preference) {
+ .st-key-results-panel { transition:background-color 160ms ease-out; }
+}
+
+/* Desktop: keep both complete rasters and acquisition captions in view.
+   Reading notes below the pair remain in the normal page scroll. */
+.st-key-satellite-pair img { width:100%; height:auto; max-height:none; object-fit:contain; }
+@media(min-width:641px) {
+ .st-key-satellite-pair img { max-height:calc(100dvh - 350px); }
+}
+
+
+/* Separate bilingual variant: the approved demo stylesheet is unchanged. */
+.st-key-language-controls { justify-content:flex-end; gap:.75rem; }
+@media(max-width:640px) { .st-key-language-controls { justify-content:flex-start; } }
+
+/* Remove the requested vertical block gap in the bilingual demo. */
+body:has(.st-key-app-header) .stVerticalBlock.st-emotion-cache-1a7fwqm.e399r293 { gap:0; }
+
+.map-legend .permanent { background:#1d4ed8; }
+
+/* Match missing-data legend to the RTC raster overlay. */
+.map-legend .missing { background:#a826c3; }
+.st-key-satellite-pair { margin-top:.75rem; }
+
+.st-key-satellite-pair p { margin:0 0 .5rem; }
+.st-key-image-reading-notes { width:100%; max-width:none; margin:1rem 0 0; padding-inline:0; gap:.65rem; }
+.st-key-image-reading-notes p { color:var(--fm-muted); font-size:.875rem; line-height:1.65; }
+
+.st-key-satellite-pair .image-frame-title { text-align:center; font-size:1rem; line-height:1.5; padding:0; margin:0 0 .75rem; }
+
+/* Use a single spacious row only when the map panel itself has enough room. */
+.st-key-map-panel { container-type:inline-size; }
+@container (min-width:660px) {
+ .map-legend { grid-template-columns:repeat(4,max-content); justify-content:space-between; gap:.5rem .75rem; }
+ .map-legend > span { white-space:nowrap; }
+}
+
+/* Keep image controls over the image instead of lifting them above its frame. */
+.st-key-satellite-pair [data-testid="stElementToolbar"] {
+ top:.5rem !important; right:.5rem !important; padding:0 !important;
+ opacity:0 !important; visibility:hidden !important; pointer-events:none; z-index:3 !important; transition:none !important;
+}
+@media(min-width:641px) {
+ .st-key-satellite-pair [data-testid="stElementToolbar"] {
+  right:max(.5rem, calc((100% - 100dvh + 350px) / 2 + .5rem)) !important;
+ }
+}
+.st-key-satellite-pair [data-testid="stFullScreenFrame"]:has(button[aria-label^="Close fullscreen"]) [data-testid="stElementToolbar"] {
+ right:.5rem !important; opacity:1 !important; visibility:visible !important; pointer-events:auto;
+}
+.st-key-satellite-pair .image-frame-title { margin-bottom:0; }
+.st-key-satellite-pair [data-testid="stColumn"] [data-testid="stVerticalBlock"] { gap:.5rem; }
+
+/* Reveal controls on the image, while crossing onto the button, or for keyboard focus. */
+.st-key-satellite-pair [data-testid="stFullScreenFrame"]:has(img:hover) [data-testid="stElementToolbar"],
+.st-key-satellite-pair [data-testid="stFullScreenFrame"]:has([data-testid="stElementToolbar"]:hover) [data-testid="stElementToolbar"],
+.st-key-satellite-pair [data-testid="stFullScreenFrame"]:has(button:focus-visible) [data-testid="stElementToolbar"] {
+ opacity:1 !important; visibility:visible !important; pointer-events:auto;
+}
+
+
+/* Match the hover target to the visible raster, excluding its letterbox margins. */
+.st-key-satellite-pair [data-testid="stFullScreenFrame"]:not(:has(button[aria-label^="Close fullscreen"])) img {
+ width:auto !important; max-width:100%; align-self:center;
+}
+
+/* Keep the hidden action reachable by keyboard, without an invisible pointer target. */
+.st-key-satellite-pair [data-testid="stElementToolbar"] button {
+ visibility:visible; pointer-events:inherit;
+}
+
+/* Safety wording must remain complete when the translated sentence wraps. */
+.verification-required {
+ display:inline-block; max-width:100%; white-space:normal; overflow-wrap:break-word;
+ color:#8a4609; background:#fff4e6; padding:.2rem .5rem; border-radius:.35rem;
+ font-size:.875rem; line-height:1.5; margin:0;
+}

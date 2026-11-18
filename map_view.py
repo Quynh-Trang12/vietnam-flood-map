@@ -1,0 +1,77 @@
+"""Readable geographic context; raster overlays are reprojected into map coordinates."""
+import base64
+import html
+import json
+from pathlib import Path
+import numpy as np
+from rasterio.warp import calculate_default_transform,reproject,Resampling
+from rasterio.transform import array_bounds
+from demo_io import png_bytes
+from map_assets import prepared_map
+ROOT=Path(__file__).parent
+TILE_URL="https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
+
+
+def overlay(result):
+    profile=result['profile'];pred=result['prediction']
+    h,w=pred.shape
+    bounds=array_bounds(h,w,profile['transform'])
+    transform,width,height=calculate_default_transform(profile['crs'],'EPSG:4326',w,h,*bounds)
+    warped=np.full((height,width),255,dtype='uint8')
+    # 255 is a visible unobserved class inside the footprint; padding is transparent.
+    reproject(pred,warped,src_transform=profile['transform'],src_crs=profile['crs'],
+              dst_transform=transform,dst_crs='EPSG:4326',resampling=Resampling.nearest)
+    footprint=np.zeros_like(warped)
+    reproject(np.ones_like(pred,dtype='uint8'),footprint,src_transform=profile['transform'],
+              src_crs=profile['crs'],dst_transform=transform,dst_crs='EPSG:4326',resampling=Resampling.nearest)
+    rgba=colorize(warped,footprint,result['metadata'].get('flood_class',1))
+    west,south,east,north=array_bounds(height,width,transform)
+    return 'data:image/png;base64,'+base64.b64encode(png_bytes(rgba)).decode(),[[south,west],[north,east]]
+
+
+def colorize(warped,footprint,flood_class):
+    rgba=np.zeros((*warped.shape,4),dtype='uint8')
+    rgba[(warped==flood_class)&(footprint==1)]=[6,182,212,215] if flood_class==2 else [200,65,20,185]
+    if flood_class==2:
+        rgba[(warped==1)&(footprint==1)]=[29,78,216,215]
+    rgba[(warped==255)&(footprint==1)]=[168,38,195,225]
+    return rgba
+
+
+def map_html(case,result=None,show_prediction=True):
+    west,south,east,north=case['bounds_wgs84']
+    bounds=[[south,west],[north,east]]
+    image='';image_bounds=bounds
+    asset=prepared_map(case['key'])
+    reference='';reference_bounds=bounds
+    if asset is not None:
+        reference=f"/app/static/maps/{case['key']}.png"
+        w,s,e,n=asset[1]['bounds_wgs84'];reference_bounds=[[s,w],[n,e]]
+    if result is not None and show_prediction:image,image_bounds=overlay(result)
+    status_message=('Nền bản đồ xung quanh chưa tải được; nền khu vực phân tích và kết quả vẫn được giữ.' if reference else 'Nền địa danh chưa tải được. Kiểm tra Internet; ranh khu vực và lớp kết quả vẫn được giữ.')
+    css=(ROOT/'assets/leaflet.css').read_text()
+    js=(ROOT/'assets/leaflet.js').read_text()
+    fonts=(ROOT/'static/fonts/fonts.css').read_text().replace('.woff2','.ttf')
+    title=html.escape(f"Thanh Hóa — {case['area_name'].lower()}")
+    return f'''<!doctype html><html lang="vi"><head><meta charset="utf-8"><style>{fonts}
+{css}
+html,body{{margin:0;height:100%;font-family:"Be Vietnam Pro",sans-serif}}#map{{height:100%;min-height:0;background:#e8eeec}}
+.leaflet-container{{font:13px/1.5 "Be Vietnam Pro",sans-serif}}.map-note{{background:white;padding:8px 12px;color:#193c44;max-width:240px;border-radius:4px}}
+#status{{display:none;background:#fff8df;padding:8px;position:absolute;bottom:30px;left:12px;z-index:800;font-size:13px;max-width:280px}}
+</style></head><body><div id="map" role="region" aria-label="Bản đồ khu vực Thanh Hóa và lớp nghi ngập"></div>
+<div id="status">{html.escape(status_message)}</div>
+<script>{js}</script><script>
+const map=L.map('map',{{scrollWheelZoom:false}}).fitBounds({json.dumps(bounds)},{{padding:[24,24]}});
+window.demoMap=map;
+const base=L.tileLayer({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
+let loaded=0;base.on('tileload',()=>{{loaded++;document.getElementById('status').style.display='none';}});
+base.on('tileerror',()=>{{if(!loaded)document.getElementById('status').style.display='block';}});
+const reference={json.dumps(reference)};
+if(reference)L.imageOverlay(reference,{json.dumps(reference_bounds)},{{interactive:false,className:'prepared-basemap'}}).addTo(map);
+L.polygon({json.dumps(case['footprint_wgs84'])},{{color:'#11636a',weight:2,fill:false,dashArray:'7 5'}}).addTo(map).bindTooltip({json.dumps(title)},{{sticky:true}});
+const image={json.dumps(image)};
+if(image)L.imageOverlay(image,{json.dumps(image_bounds)},{{interactive:false,className:'prediction-overlay'}}).addTo(map);
+L.control.scale({{imperial:false,position:'bottomleft'}}).addTo(map);
+const note=L.control({{position:'topright'}});note.onAdd=()=>{{const el=L.DomUtil.create('div','map-note');el.textContent={json.dumps(title)};return el;}};note.addTo(map);
+window.demoMapReady=true;
+</script></body></html>'''

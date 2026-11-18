@@ -1,0 +1,231 @@
+{
+  "created_utc": "2026-11-18T10:28:11.482671+00:00",
+  "model_sha256": "8d41bd9ee0c8dda7cda28ae173e4fa8fddb4bc5f2a006bf2770cb7cbeb5198aa",
+  "operating_point": "3-class argmax",
+  "precision": "float32",
+  "patch_size": 256,
+  "channels": [
+    "post_VV",
+    "post_VH",
+    "pre_B02",
+    "pre_B03",
+    "pre_B04",
+    "pre_B08",
+    "pre_B11",
+    "pre_B12",
+    "pre_clear"
+  ],
+  "runtime": "Python 3.13; CPU PyTorch 2.13.0; Streamlit 1.67.0",
+  "prepared_assets": "Exact WGS84 pixel areas and reference backgrounds only; no cached predictions",
+  "cases": [
+    "EMSR754-8-0",
+    "EMSR754-8-1",
+    "EMSR754-8-3"
+  ],
+  "files": {
+    ".gitignore": {
+      "sha256": "be032f86219e72cff285888ef1858d2ae24107873c292bcecb39efa7695a2cff",
+      "bytes": 50
+    },
+    "demo_io.py": {
+      "sha256": "09eff024e24642c1697d80aa3188897bcc88273c1c1c38c3a499d00e12810523",
+      "bytes": 3791
+    },
+    "ui_bilingual.css": {
+      "sha256": "e1dce62f386585f71d21ecf5cf3dff60b5819243b886f611b85891c732e8caae",
+      "bytes": 9284
+    },
+    "map_view.py": {
+      "sha256": "f2a9ea37b0e70aa2e23af37f012c1d8606f65a0fa2817d725a0ceafc1dc42cd9",
+      "bytes": 4972
+    },
+    "map_export.py": {
+      "sha256": "d1c047897f6e17945fc23445700d3f7810196eafa8030c98bce931a3726bd39a",
+      "bytes": 10450
+    },
+    "app_bilingual.py": {
+      "sha256": "90c43a805d92113a088440390a3498c46ba4308c021a6aed6eb7773327428b22",
+      "bytes": 13308
+    },
+    "bilingual_support.py": {
+      "sha256": "9607094d5f6465ca4414bcf15721265473effe20ba5ff0b35d559c59ee770548",
+      "bytes": 75032
+    },
+    "pipeline_rtc.py": {
+      "sha256": "0b2701a4b96385542a2214221534158170921fc1438027d2669a012acaa469ec",
+      "bytes": 12521
+    },
+    "map_assets.py": {
+      "sha256": "2ce6d4b179e377cf106ea11d515c18bfc6537665ba953f916089addfab6e3c7f",
+      "bytes": 1008
+    },
+    "streamlit_app.py": {
+      "sha256": "c173833373ebcacfa0d5d873fd14cdaf4605414614dc04d7d04366c31511361f",
+      "bytes": 168
+    },
+    "requirements.txt": {
+      "sha256": "43fe56c1b160c538f050466e7827ceeb6094655435b261d331724b43b4bd69da",
+      "bytes": 173
+    },
+    ".streamlit/config.toml": {
+      "sha256": "807a54f947bb3ee5eba6116b20e5917cca85026999fbd154c750500e9d00ba6b",
+      "bytes": 2435
+    },
+    "resources/DATA_SOURCE_NOTICE.md": {
+      "sha256": "3585f9541ba1ed8581d48ae381c47ecd25bf5f62e65c340c8c6df5212dccf7d1",
+      "bytes": 7535
+    },
+    "data/eligible_vietnam_cases.json": {
+      "sha256": "b9a7f0f9974a91a9bf34f7af59a4482a2657b561f1286e914fd8987f1d8b93e2",
+      "bytes": 7100
+    },
+    "architecture/flood_network.py": {
+      "sha256": "a1df0ed2371f0fbfe86294ba4701fec99806cb2980bfac4804407143c90f84c5",
+      "bytes": 1597
+    },
+    "architecture/change_unet.py": {
+      "sha256": "33003faf1b4f90df39b3e0922125030826171222353ba20d703d4ab35a84ba24",
+      "bytes": 2887
+    },
+    "assets/leaflet.js": {
+      "sha256": "db49d009c841f5ca34a888c96511ae936fd9f5533e90d8b2c4d57596f4e5641a",
+      "bytes": 147552
+    },
+    "assets/leaflet.css": {
+      "sha256": "a7837102824184820dfa198d1ebcd109ff6d0ff9a2672a074b9a1b4d147d04c6",
+      "bytes": 14806
+    },
+    "static/fonts/be-vietnam-pro-0.ttf": {
+      "sha256": "4ad53eac036092be79a34b5fa0aa32d0ebb3c7e5df4bc058764f5614fbf148a0",
+      "bytes": 120228
+    },
+    "static/fonts/be-vietnam-pro-1.woff2": {
+      "sha256": "557a1c42a7f8eb83f84255d475017b1235c1101b899367f974a1cbfa19cd7c3d",
+      "bytes": 122644
+    },
+    "static/fonts/be-vietnam-pro-0.woff2": {
+      "sha256": "4ad53eac036092be79a34b5fa0aa32d0ebb3c7e5df4bc058764f5614fbf148a0",
+      "bytes": 120228
+    },
+    "static/fonts/DejaVuSans-LICENSE.txt": {
+      "sha256": "63d3ba759d12804c5b31a9d5940d855c1820d1f5999e6b0872eb1c7ff045fbc9",
+      "bytes": 3859
+    },
+    "static/fonts/be-vietnam-pro-3.woff2": {
+      "sha256": "aef76cd15b8c9faa1ff21951bb71963a774aa381526c557e5a52f38d430c4650",
+      "bytes": 126228
+    },
+    "static/fonts/fonts.css": {
+      "sha256": "d2fb9a7c67e05f8ec59fe0593cdda50cae5520d560675683a905c07629a42d0e",
+      "bytes": 740
+    },
+    "static/fonts/be-vietnam-pro-3.ttf": {
+      "sha256": "aef76cd15b8c9faa1ff21951bb71963a774aa381526c557e5a52f38d430c4650",
+      "bytes": 126228
+    },
+    "static/fonts/DejaVuSans.ttf": {
+      "sha256": "ae7b7855e115a5966d8b1b3f80f254ccc117ec86f9965e202ee2940453837280",
+      "bytes": 759720
+    },
+    "static/fonts/be-vietnam-pro-2.ttf": {
+      "sha256": "cbf437bf71c8536a7aaed632dce2583ea5ec97c07efffc625c31991d1027ba3b",
+      "bytes": 123064
+    },
+    "static/fonts/be-vietnam-pro-2.woff2": {
+      "sha256": "cbf437bf71c8536a7aaed632dce2583ea5ec97c07efffc625c31991d1027ba3b",
+      "bytes": 123064
+    },
+    "static/fonts/be-vietnam-pro-1.ttf": {
+      "sha256": "557a1c42a7f8eb83f84255d475017b1235c1101b899367f974a1cbfa19cd7c3d",
+      "bytes": 122644
+    },
+    "static/fonts/OFL.txt": {
+      "sha256": "6b7f8f73609a25ea78c891e34cf37b06f8a676b7ea986e941e43b009110f2a85",
+      "bytes": 4397
+    },
+    "static/maps/EMSR754-8-3.png": {
+      "sha256": "084130de8f972960e4b1cbb75a4d9231e549189b100d2ef543b999bd410a11a2",
+      "bytes": 985506
+    },
+    "static/maps/EMSR754-8-0.png": {
+      "sha256": "b88a4fde54fe4ff4f0fd34bdc26965e7ab9c4003b91542bd67de784546b0119a",
+      "bytes": 1329621
+    },
+    "static/maps/EMSR754-8-3.json": {
+      "sha256": "248c3d8a2754aa17029a86d530885810595e6695ddfafc765988b179ed6d8180",
+      "bytes": 2022
+    },
+    "static/maps/EMSR754-8-1.png": {
+      "sha256": "20efbe23f5338fd088428c71b24b7f42babaef6f7510f5fe9c4f8b1db60ab5ca",
+      "bytes": 1045775
+    },
+    "static/maps/EMSR754-8-0.json": {
+      "sha256": "aab40bd5fb32969194205f81dafd7ca6fbfba0814fa3fb64f31a326232cd92ca",
+      "bytes": 2529
+    },
+    "static/maps/EMSR754-8-1.json": {
+      "sha256": "e0364e41772caa38ec9900a60c60b6a716311a1fa7fd38656a441e3cfec5035d",
+      "bytes": 2256
+    },
+    "resources/geometry/geometry-manifest.json": {
+      "sha256": "f2d878f7394d13513a84561ae09a87f6c67caa4281651bbf509b1f773cdf7c6e",
+      "bytes": 787
+    },
+    "resources/geometry/areas-d2b10659ad8c510258e7ec6cba4e68f35eb8cff11ac1cf1ff9aff9ca65f3e291.npy": {
+      "sha256": "97bcd02c83f184f1c42e6c3dbb5aae011dfd096831ee48f55ca1462068c3e2bb",
+      "bytes": 8388736
+    },
+    "resources/geometry/areas-c8472a9c06f5b54044dbc021415da28c5c21e245ced5bc05f12f514df1db520d.npy": {
+      "sha256": "ce47305c4e1db9fe70497f191430f2825b4b22e09eb133d046aed6e296325057",
+      "bytes": 8388736
+    },
+    "resources/geometry/areas-529b75dcfb9da77def0ccb5f3d8f2ecef85bf6dbd0a3f2c7dd53b0b9c37bf903.npy": {
+      "sha256": "9006eef03167e41d7b437677b29fe9176aefe8ae1d8b681cb72a2021e7c9ad90",
+      "bytes": 8388736
+    },
+    "resources/model/selected.pt": {
+      "sha256": "8d41bd9ee0c8dda7cda28ae173e4fa8fddb4bc5f2a006bf2770cb7cbeb5198aa",
+      "bytes": 57477771
+    },
+    "resources/model/comparison.json": {
+      "sha256": "3b26d47b31a44859e42047735ba83c458c92c71f869204479a96faa93c561852",
+      "bytes": 50047
+    },
+    "resources/inputs/EMSR754-8-1_cloudmask_pre_20240810T032519.tif": {
+      "sha256": "398efb5b30eff6756f20c0c5829016e4e48d5c896f8b7341594cc99143360d97",
+      "bytes": 2502
+    },
+    "resources/inputs/EMSR754-8-3_s2l2a_pre_20240810T032519.tif": {
+      "sha256": "09433c2583fb04cc9b479977d698e92ff67ce0668d53e68904c739c657337d96",
+      "bytes": 12342216
+    },
+    "resources/inputs/EMSR754-8-0_s2l2a_pre_20240810T032519.tif": {
+      "sha256": "27ab8fdd143778d842c79c2247830a6441c54992920c734a1d2ee525ef2417a4",
+      "bytes": 12188889
+    },
+    "resources/inputs/EMSR754-8-1_s1rtc_post_20240912T225139.tif": {
+      "sha256": "0cbc60376e64efbc233dc105903141dde8dea2b399fb98ecb5f71b3c90e2b3c9",
+      "bytes": 3265545
+    },
+    "resources/inputs/EMSR754-8-0_cloudmask_pre_20240810T032519.tif": {
+      "sha256": "592c1916a9ead69094df341d0595de5fa7cbc921b8a8f0343ddbf60d48bae671",
+      "bytes": 2502
+    },
+    "resources/inputs/EMSR754-8-1_s2l2a_pre_20240810T032519.tif": {
+      "sha256": "a224040877db88dced401767bb6c53b70fc0b57b5835e3e9bf6c27665f287240",
+      "bytes": 12178395
+    },
+    "resources/inputs/EMSR754-8-3_s1rtc_post_20240912T225139.tif": {
+      "sha256": "f79797f8376540f12f39dfd68d6e9323d46fdb188296eff51ab68be5db989ae1",
+      "bytes": 3320630
+    },
+    "resources/inputs/EMSR754-8-0_s1rtc_post_20240912T225139.tif": {
+      "sha256": "f562fb0a560a123e13d5d418a798a043a8bc0ccb1c2e3f18c2b6d9e6317fe012",
+      "bytes": 3288560
+    },
+    "resources/inputs/EMSR754-8-3_cloudmask_pre_20240810T032519.tif": {
+      "sha256": "52a842b832e410efa93d8e5fdc975fb4a59ead960d626fae1c85abbd8ef750c3",
+      "bytes": 2502
+    }
+  }
+}
