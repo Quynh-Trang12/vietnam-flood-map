@@ -44,8 +44,8 @@
       "bytes": 10450
     },
     "app_bilingual.py": {
-      "sha256": "90c43a805d92113a088440390a3498c46ba4308c021a6aed6eb7773327428b22",
-      "bytes": 13308
+      "sha256": "dbb27f4c1ed13f867ce85d68551043d343cec03128d04504199fc7e0395069a8",
+      "bytes": 13413
     },
     "bilingual_support.py": {
       "sha256": "9607094d5f6465ca4414bcf15721265473effe20ba5ff0b35d559c59ee770548",
@@ -226,6 +226,10 @@
     "resources/inputs/EMSR754-8-3_cloudmask_pre_20240810T032519.tif": {
       "sha256": "52a842b832e410efa93d8e5fdc975fb4a59ead960d626fae1c85abbd8ef750c3",
       "bytes": 2502
+    },
+    "cloud_chrome.js": {
+      "sha256": "d493479da86ce351a32fcdfde3dbe3f19eb6c395189bf851d99aac5988854a11",
+      "bytes": 929
     }
   }
 }
