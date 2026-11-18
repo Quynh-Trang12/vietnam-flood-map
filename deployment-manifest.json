@@ -36,20 +36,20 @@
       "bytes": 11699
     },
     "map_view.py": {
-      "sha256": "f49316d4baff397ca355d53a2bbc5d4103e995797c2a309a4d0c4e8f889604ad",
-      "bytes": 6255
+      "sha256": "4e697190eed6ce5fe5a11e15dcdd4449016bdc6613c97470368172c5bc95be33",
+      "bytes": 5275
     },
     "map_export.py": {
       "sha256": "d1c047897f6e17945fc23445700d3f7810196eafa8030c98bce931a3726bd39a",
       "bytes": 10450
     },
     "app_bilingual.py": {
-      "sha256": "6b29cf6148df214bc62e41a300fc4a861e6623aa8acb6e042d01e252576436e3",
-      "bytes": 13545
+      "sha256": "390804afa2741cf48fafa04c791f7fe6e551cb01684d3d51fa07c60072319f6d",
+      "bytes": 14649
     },
     "bilingual_support.py": {
-      "sha256": "6dfad7a4615525723947139d8ce6f089526c6767692d0b21cfabae0e9a19c89b",
-      "bytes": 75790
+      "sha256": "0855d127e6b98c58d2f27de1b694d8301a841a93a776a94e4f49a81307253879",
+      "bytes": 75776
     },
     "pipeline_rtc.py": {
       "sha256": "0b2701a4b96385542a2214221534158170921fc1438027d2669a012acaa469ec",

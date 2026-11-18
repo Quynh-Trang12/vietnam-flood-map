@@ -80,26 +80,3 @@ const note=L.control({{position:'topright'}});note.onAdd=()=>{{const el=L.DomUti
 window.demoMapReady=true;
 </script></body></html>'''
 
-
-def interaction_controls(language):
-    pan='Bật/tắt kéo bản đồ' if language=='vi' else 'Toggle map interaction'
-    reset='Về khu vực phân tích' if language=='vi' else 'Reset to analysis area'
-    return f'''<div class="map-compact-controls">
-<button type="button" class="map-pan-control" title="{pan}" aria-label="{pan}" aria-pressed="false">
-
-</button>
-<button type="button" class="map-reset-control" title="{reset}" aria-label="{reset}">
-
-</button></div>
-<script>
-(() => {{
- const root=document.querySelector('.map-compact-controls');
- if(!root)return;
- const pan=root.querySelector('.map-pan-control');
- pan.onclick=()=>{{const on=pan.getAttribute('aria-pressed')==='true';pan.setAttribute('aria-pressed',String(!on));}};
- root.querySelector('.map-reset-control').onclick=()=>{{
-  const frame=root.closest('.st-key-map-canvas').querySelector('iframe');
-  frame?.contentWindow.postMessage({{type:'flood-map-reset'}},location.origin);
- }};
-}})();
-</script>'''

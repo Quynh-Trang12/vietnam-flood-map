@@ -1,10 +1,10 @@
 """Map workspace for Vietnamese post-flood report preparation."""
 import time
+import json
 from pathlib import Path
 import streamlit as st
 from pipeline_rtc import catalogue, infer, load_model, model_signature, source_images, EXPORT_VERSION
 from functools import partial
-from map_view import interaction_controls
 from bilingual_support import translate, area_name, local_date, localized_map, localized_bundle, message, radar_legend
 ROOT = Path(__file__).resolve().parent
 if st.query_params.get('demo') == '1' and not st.session_state.get('client_demo_initialized'):
@@ -23,6 +23,30 @@ st.session_state.last_language = language
 st.set_page_config(page_title=tr('Bản đồ ngập Việt Nam'), page_icon=':material/water:', layout='wide', initial_sidebar_state='auto')
 st.html(ROOT / 'ui_bilingual.css')
 st.html('<script>' + (ROOT / 'cloud_chrome.js').read_text() + '</script>', unsafe_allow_javascript=True)
+
+def interaction_controls(language, bounds):
+    pan='Bật/tắt kéo bản đồ' if language=='vi' else 'Toggle map interaction'
+    reset='Về khu vực phân tích' if language=='vi' else 'Reset to analysis area'
+    return f'''<div class="map-compact-controls">
+<button type="button" class="map-pan-control" title="{pan}" aria-label="{pan}" aria-pressed="false">
+
+</button>
+<button type="button" class="map-reset-control" title="{reset}" aria-label="{reset}">
+
+</button></div>
+<script>
+(() => {{
+ const root=document.querySelector('.map-compact-controls');
+ if(!root)return;
+ const pan=root.querySelector('.map-pan-control');
+ pan.onclick=()=>{{const on=pan.getAttribute('aria-pressed')==='true';pan.setAttribute('aria-pressed',String(!on));}};
+ root.querySelector('.map-reset-control').onclick=()=>{{
+  const frame=root.closest('.st-key-map-canvas').querySelector('iframe');
+  const map=frame?.contentWindow.demoMap;
+  if(map) map.fitBounds({json.dumps(bounds)},{{padding:[24,24],animate:false}});
+ }};
+}})();
+</script>'''
 
 @st.cache_resource
 def model_resource(signature):
@@ -105,7 +129,7 @@ with tabs[0]:
             with st.container(border=True, key='map-panel', gap='xsmall'):
                 show = st.session_state.get('overlay', True)
                 with st.container(key='map-canvas', height='stretch', border=False):
-                    st.html(interaction_controls(language), unsafe_allow_javascript=True)
+                    st.html(interaction_controls(language, [[case['bounds_wgs84'][1],case['bounds_wgs84'][0]],[case['bounds_wgs84'][3],case['bounds_wgs84'][2]]]), unsafe_allow_javascript=True)
                     st.iframe(localized_map(case, result, show and result is not None, language), height='stretch', alt=tr('Bản đồ Thanh Hóa có địa danh, ranh khu vực khảo sát và lớp AI nghi ngập'))
                 st.html(radar_legend(language))
             with st.container(key='map-note'):
