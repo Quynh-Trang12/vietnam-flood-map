@@ -21,6 +21,7 @@ if language_changed:
 st.session_state.last_language = language
 st.set_page_config(page_title=tr('Bản đồ ngập Việt Nam'), page_icon=':material/water:', layout='wide', initial_sidebar_state='auto')
 st.html(ROOT / 'ui_bilingual.css')
+st.html('<script>' + (ROOT / 'cloud_chrome.js').read_text() + '</script>', unsafe_allow_javascript=True)
 
 @st.cache_resource
 def model_resource(signature):
