@@ -36,8 +36,8 @@
       "bytes": 11742
     },
     "map_view.py": {
-      "sha256": "e14084eed7927f4e414de2f64a59bc71c06a8d999b73a5a9667fb15687091e73",
-      "bytes": 5573
+      "sha256": "79d7458af650a48240b7cdf181fa571c85358ad3c4326164af829ab1fdab65a6",
+      "bytes": 5699
     },
     "map_export.py": {
       "sha256": "d1c047897f6e17945fc23445700d3f7810196eafa8030c98bce931a3726bd39a",
@@ -230,6 +230,18 @@
     "cloud_chrome.js": {
       "sha256": "d493479da86ce351a32fcdfde3dbe3f19eb6c395189bf851d99aac5988854a11",
       "bytes": 929
+    },
+    "static/maps/EMSR754-8-3.webp": {
+      "sha256": "26f996054e596dbf1accd928991c248c74a76be115dd325bf0cd19e7c51c1a81",
+      "bytes": 651652
+    },
+    "static/maps/EMSR754-8-0.webp": {
+      "sha256": "3af02bf730a55561c5c352e7b92189e19a750b45b68805702737c958d83b2f4f",
+      "bytes": 920786
+    },
+    "static/maps/EMSR754-8-1.webp": {
+      "sha256": "59f69707e1d0ee72f8a6ce254065abed1836722e274372501e8af42e701664da",
+      "bytes": 699818
     }
   }
 }

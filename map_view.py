@@ -45,7 +45,8 @@ def map_html(case,result=None,show_prediction=True,view_revision=0):
     asset=prepared_map(case['key'])
     reference='';reference_bounds=bounds
     if asset is not None:
-        reference=f"app/static/maps/{case['key']}.png"
+        extension="webp" if (ROOT/f"static/maps/{case['key']}.webp").is_file() else "png"
+        reference=f"app/static/maps/{case['key']}.{extension}?v={asset[1]['sha256'][:12]}"
         w,s,e,n=asset[1]['bounds_wgs84'];reference_bounds=[[s,w],[n,e]]
     if result is not None and show_prediction:image,image_bounds=overlay(result)
     status_message=('Nền bản đồ xung quanh chưa tải được; nền khu vực phân tích và kết quả vẫn được giữ.' if reference else 'Nền địa danh chưa tải được. Kiểm tra Internet; ranh khu vực và lớp kết quả vẫn được giữ.')
