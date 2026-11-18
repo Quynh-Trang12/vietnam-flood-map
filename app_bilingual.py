@@ -14,7 +14,12 @@ language = st.session_state.get('language', 'vi')
 # Send page geometry and styles before importing the ML runtime or emitting widgets.
 # Otherwise the first visible frame uses Streamlit's centered/default layout.
 st.set_page_config(page_title='Vietnam flood map' if language == 'en' else 'Bản đồ ngập Việt Nam', page_icon=':material/water:', layout='wide', initial_sidebar_state='auto')
-st.html(ROOT / 'ui_bilingual.css')
+# Create the sidebar before the first main-page element, so its desktop width
+# is known before the app content is painted (auto still collapses on mobile).
+sidebar_layout = st.sidebar.container(key='sidebar-layout', gap='small')
+# Markdown renders the style with its element. st.html inserts styles in a
+# frontend effect, which can run after the widgets have already been painted.
+st.markdown('<style>' + (ROOT / 'ui_bilingual.css').read_text() + '</style>', unsafe_allow_html=True)
 st.html('<script>' + (ROOT / 'cloud_chrome.js').read_text() + '</script>', unsafe_allow_javascript=True)
 from pipeline_rtc import catalogue, infer, load_model, model_signature, source_images, EXPORT_VERSION
 from bilingual_support import translate, area_name, local_date, localized_map, localized_bundle, message, radar_legend
@@ -73,27 +78,26 @@ if not cases:
     st.warning(tr('Chưa có cặp ảnh Việt Nam đạt kiểm tra đầu vào. Không thể chạy phân tích bằng ảnh chưa phù hợp.'))
     st.stop()
 pending_model = model_future(signature)
-with st.sidebar:
-    with st.container(key='sidebar-layout', gap='small'):
-        with st.container(key='brand'):
-            st.header(tr('Flood Mapping'), icon=':material/water:')
-        with st.container(key='sidebar-scope'):
-            st.selectbox(tr('Đợt mưa lũ'), [tr('Tháng 9/2024 — Thanh Hóa')], key='event')
-            index = st.pills(tr('Khu vực muốn xem'), list(range(len(cases))), format_func=lambda i: area_name(cases[i]['area_name'], language), default=st.session_state.get('selected_area', 0), required=True, key=f'area_{language}', wrap=True, width='stretch')
-        st.session_state.selected_area = index
-        case = cases[index]
-        if st.session_state.get('case_key') != case['key']:
-            for key in ('result', 'bundle', 'error'):
-                st.session_state.pop(key, None)
-            st.session_state.case_key = case['key']
-        with st.container(key='sidebar-dates'):
-            st.html(f'<dl class="observation-dates"><dt>{ui("before_title")}</dt><dd>{local_date(case["optical_local"], language)} <small>GMT+7</small></dd><dt>{ui("observation_title")}</dt><dd>{local_date(case["post_local"], language)} <small>GMT+7</small></dd></dl>')
-        st.badge(ui('input_badge'), color='green', icon=':material/check_circle:')
-        run = st.button(tr('Phân tích khu vực này'), type='primary', icon=':material/play_arrow:', width='stretch', key='analyze')
-        with st.container(key='sidebar-note'):
-            st.markdown(tr('**Phạm vi dữ liệu**'))
-            st.markdown(ui('coverage'))
-        st.caption(tr('Bản thử nghiệm nghiên cứu · dữ liệu lịch sử'))
+with sidebar_layout:
+    with st.container(key='brand'):
+        st.header(tr('Flood Mapping'), icon=':material/water:')
+    with st.container(key='sidebar-scope'):
+        st.selectbox(tr('Đợt mưa lũ'), [tr('Tháng 9/2024 — Thanh Hóa')], key='event')
+        index = st.pills(tr('Khu vực muốn xem'), list(range(len(cases))), format_func=lambda i: area_name(cases[i]['area_name'], language), default=st.session_state.get('selected_area', 0), required=True, key=f'area_{language}', wrap=True, width='stretch')
+    st.session_state.selected_area = index
+    case = cases[index]
+    if st.session_state.get('case_key') != case['key']:
+        for key in ('result', 'bundle', 'error'):
+            st.session_state.pop(key, None)
+        st.session_state.case_key = case['key']
+    with st.container(key='sidebar-dates'):
+        st.html(f'<dl class="observation-dates"><dt>{ui("before_title")}</dt><dd>{local_date(case["optical_local"], language)} <small>GMT+7</small></dd><dt>{ui("observation_title")}</dt><dd>{local_date(case["post_local"], language)} <small>GMT+7</small></dd></dl>')
+    st.badge(ui('input_badge'), color='green', icon=':material/check_circle:')
+    run = st.button(tr('Phân tích khu vực này'), type='primary', icon=':material/play_arrow:', width='stretch', key='analyze')
+    with st.container(key='sidebar-note'):
+        st.markdown(tr('**Phạm vi dữ liệu**'))
+        st.markdown(ui('coverage'))
+    st.caption(tr('Bản thử nghiệm nghiên cứu · dữ liệu lịch sử'))
 with st.container(key='app-header'):
     heading, status = st.columns([3, 2], vertical_alignment='center')
     with heading:
@@ -101,7 +105,7 @@ with st.container(key='app-header'):
             st.title(tr('Bản đồ ngập Việt Nam'))
             st.html(tr('<div class="workspace-subtitle">Thanh Hóa – Mưa lũ tháng 9/2024</div><p class="mobile-scope-hint">Mở thanh bên từ mép trái để chọn khu vực và chạy phân tích.</p>'))
     with status:
-        with st.container(horizontal=True, vertical_alignment='center', key='language-controls'):
+        with st.container(horizontal=True, horizontal_alignment='right', vertical_alignment='center', key='language-controls'):
             st.segmented_control('Language / Ngôn ngữ', ['vi', 'en'], format_func=lambda code: code.upper(), default=None if 'language' in st.session_state else 'vi', required=True, key='language', label_visibility='collapsed', width='content')
             st.badge(tr('Bản thử nghiệm'), color='orange', icon=':material/science:')
 tab_labels = [tr(label) for label in ['Bản đồ', 'Ảnh vệ tinh đầu vào', 'Nguồn & độ tin cậy']]
