@@ -148,3 +148,13 @@ body:has(.st-key-app-header) .stVerticalBlock.st-emotion-cache-1a7fwqm.e399r293 
  color:#8a4609; background:#fff4e6; padding:.2rem .5rem; border-radius:.35rem;
  font-size:.875rem; line-height:1.5; margin:0;
 }
+
+/* Community Cloud owner controls are separate from the app's sidebar controls. */
+body:has(.st-key-app-header) [data-testid="stAppViewerBadge"],
+body:has(.st-key-app-header) [data-testid="stManageAppButton"],
+body:has(.st-key-app-header) [data-testid="stAppManageButton"],
+body:has(.st-key-app-header) button[aria-label="Manage app" i],
+body:has(.st-key-app-header) a[aria-label="Manage app" i],
+body:has(.st-key-app-header) [class*="viewerBadge_container"] {
+ display:none !important;
+}
