@@ -7,10 +7,10 @@ import time
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
+from functools import lru_cache
 
 import numpy as np
 import rasterio
-import torch
 from rasterio.io import MemoryFile
 from demo_io import catalogue as base_catalogue, pixel_areas, png_bytes, sha256, resolve_input, RAW, ROOT, WORKSPACE
 
@@ -18,7 +18,6 @@ DEPLOYED = (ROOT/'deployment-manifest.json').is_file()
 PROJECT = ROOT if DEPLOYED else WORKSPACE
 TRAINING = ROOT/'architecture' if DEPLOYED else PROJECT/'04-Implementation/Training/Expanded-Flood'
 sys.path.insert(0, str(TRAINING))
-from flood_network import Network
 BANDS = [2,3,4,8,11,12]  # Training contract: B02/B03/B04/B08/B11/B12 (one-based).
 from map_export import prediction_map
 
@@ -58,12 +57,25 @@ def catalogue():
     return cases
 
 
+@lru_cache(maxsize=1)
+def _model_runtime():
+    """Load the CPU inference stack only when an analysis actually needs it.
+
+    Opening the map/catalogue must not wait for torch and torchvision imports.
+    The same modules and network are used for every subsequent inference.
+    """
+    import torch
+    from flood_network import Network
+    return torch, Network
+
+
 def load_model(expected_signature=None):
     if expected_signature is not None and expected_signature != model_signature():
         raise ValueError('RTC model signature changed.')
     if sha256(CHECKPOINT) != MODEL_SHA:
         raise ValueError('RTC checkpoint hash mismatch.')
     # GPU access remains exclusively with the protected worker; interactive serving uses CPU.
+    torch, Network = _model_runtime()
     device = torch.device('cpu')
     torch.set_num_threads(4)
     model = Network(9).to(device)
@@ -107,6 +119,7 @@ def read_inputs(case):
 
 
 def infer(case, model, device):
+    torch, _ = _model_runtime()
     started = time.perf_counter()
     features, valid, clear, profile, hashes = read_inputs(case)
     h,w = valid.shape

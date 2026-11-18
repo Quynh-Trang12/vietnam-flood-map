@@ -3,19 +3,19 @@
 ::selection { background:#bce9e6; color:#102d43; }
 /* Hide menu, deployment and host-injected Share controls. Do not hide stToolbar itself:
    that shared wrapper also contains the Expand sidebar button. */
-body:has(.st-key-app-header) header[data-testid="stHeader"] { height:0 !important; min-height:0; background:transparent; pointer-events:none; }
-body:has(.st-key-app-header) [data-testid="stMainMenu"],
-body:has(.st-key-app-header) [data-testid="stMainMenuButton"],
-body:has(.st-key-app-header) [data-testid="stAppDeployButton"],
-body:has(.st-key-app-header) [data-testid="stToolbarActions"],
-body:has(.st-key-app-header) [data-testid="stStatusWidget"] { display:none !important; }
-body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"] { pointer-events:auto; position:fixed; top:176px; left:0; background:transparent; color:#53697b; border-radius:0 .4rem .4rem 0; opacity:.55; }
-body:has(.st-key-app-header) .stMainBlockContainer { padding:1rem 1.5rem 1rem; }
+header[data-testid="stHeader"] { height:0 !important; min-height:0; background:transparent; pointer-events:none; }
+[data-testid="stMainMenu"],
+[data-testid="stMainMenuButton"],
+[data-testid="stAppDeployButton"],
+[data-testid="stToolbarActions"],
+[data-testid="stStatusWidget"] { display:none !important; }
+[data-testid="stExpandSidebarButton"] { pointer-events:auto; position:fixed; top:176px; left:0; background:transparent; color:#53697b; border-radius:0 .4rem .4rem 0; opacity:.55; }
+.stMainBlockContainer { padding:1rem 1.5rem 1rem; }
 /* An edge handle stays clear of the title and remains discoverable without hover. */
-body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"]:hover,
-body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"]:focus-within { opacity:1; background:#e0f2f1; color:#087f8c; }
+[data-testid="stExpandSidebarButton"]:hover,
+[data-testid="stExpandSidebarButton"]:focus-within { opacity:1; background:#e0f2f1; color:#087f8c; }
 @media (hover:none) {
- body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"] { opacity:1; background:#e0f2f1; }
+ [data-testid="stExpandSidebarButton"] { opacity:1; background:#e0f2f1; }
 }
 /* Equal tracks keep translated area names aligned in both languages. */
 :is(.st-key-area_vi,.st-key-area_en), :is(.st-key-area_vi,.st-key-area_en) [data-testid="stButtonGroup"] { width:100%; }
@@ -64,7 +64,7 @@ body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"]:focus-within 
 .mobile-scope-hint { display:none; }
 .st-emotion-cache-1rmjxbq { height: 2.3rem; }
 @media(max-width:640px) {
- body:has(.st-key-app-header) .stMainBlockContainer { padding:3.5rem 1rem 1rem; }
+ .stMainBlockContainer { padding:3.5rem 1rem 1rem; }
  .st-key-app-header h1 { font-size:1.5rem; }
  .mobile-scope-hint { display:block; margin:.5rem 0 0; font-size:.875rem; line-height:1.6; color:#53697b; }
  .st-key-map-canvas { height:440px !important; }
@@ -87,7 +87,7 @@ body:has(.st-key-app-header) [data-testid="stExpandSidebarButton"]:focus-within 
 @media(max-width:640px) { .st-key-language-controls { justify-content:flex-start; } }
 
 /* Remove the requested vertical block gap in the bilingual demo. */
-body:has(.st-key-app-header) .stVerticalBlock.st-emotion-cache-1a7fwqm.e399r293 { gap:0; }
+.stVerticalBlock.st-emotion-cache-1a7fwqm.e399r293 { gap:0; }
 
 .map-legend .permanent { background:#1d4ed8; }
 

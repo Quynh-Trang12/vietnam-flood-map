@@ -79,24 +79,24 @@ gatherUsageStats = false
 
 [[theme.fontFaces]]
 family = "Be Vietnam Pro"
-url = "app/static/fonts/be-vietnam-pro-0.ttf"
+url = "app/static/fonts/be-vietnam-pro-0.woff2"
 weight = "400"
 style = "normal"
 
 [[theme.fontFaces]]
 family = "Be Vietnam Pro"
-url = "app/static/fonts/be-vietnam-pro-1.ttf"
+url = "app/static/fonts/be-vietnam-pro-1.woff2"
 weight = "500"
 style = "normal"
 
 [[theme.fontFaces]]
 family = "Be Vietnam Pro"
-url = "app/static/fonts/be-vietnam-pro-2.ttf"
+url = "app/static/fonts/be-vietnam-pro-2.woff2"
 weight = "600"
 style = "normal"
 
 [[theme.fontFaces]]
 family = "Be Vietnam Pro"
-url = "app/static/fonts/be-vietnam-pro-3.ttf"
+url = "app/static/fonts/be-vietnam-pro-3.woff2"
 weight = "700"
 style = "normal"

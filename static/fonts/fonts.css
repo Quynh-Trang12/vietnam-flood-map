@@ -2,27 +2,27 @@
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
-  src: url(/app/static/fonts/be-vietnam-pro-0.woff2) format('truetype');
+  font-display: optional;
+  src: url(be-vietnam-pro-0.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 500;
-  font-display: swap;
-  src: url(/app/static/fonts/be-vietnam-pro-1.woff2) format('truetype');
+  font-display: optional;
+  src: url(be-vietnam-pro-1.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 600;
-  font-display: swap;
-  src: url(/app/static/fonts/be-vietnam-pro-2.woff2) format('truetype');
+  font-display: optional;
+  src: url(be-vietnam-pro-2.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Be Vietnam Pro';
   font-style: normal;
   font-weight: 700;
-  font-display: swap;
-  src: url(/app/static/fonts/be-vietnam-pro-3.woff2) format('truetype');
+  font-display: optional;
+  src: url(be-vietnam-pro-3.woff2) format('woff2');
 }

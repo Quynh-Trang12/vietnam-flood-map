@@ -45,16 +45,17 @@ def map_html(case,result=None,show_prediction=True,view_revision=0):
     asset=prepared_map(case['key'])
     reference='';reference_bounds=bounds
     if asset is not None:
+        preview=ROOT/f"static/maps/{case['key']}-preview.webp"
         extension="webp" if (ROOT/f"static/maps/{case['key']}.webp").is_file() else "png"
-        reference=f"app/static/maps/{case['key']}.{extension}?v={asset[1]['sha256'][:12]}"
+        filename=preview.name if preview.is_file() else f"{case['key']}.{extension}"
+        reference=f"app/static/maps/{filename}?v={asset[1]['sha256'][:12]}"
         w,s,e,n=asset[1]['bounds_wgs84'];reference_bounds=[[s,w],[n,e]]
     if result is not None and show_prediction:image,image_bounds=overlay(result)
     status_message=('Nền bản đồ xung quanh chưa tải được; nền khu vực phân tích và kết quả vẫn được giữ.' if reference else 'Nền địa danh chưa tải được. Kiểm tra Internet; ranh khu vực và lớp kết quả vẫn được giữ.')
     css=(ROOT/'assets/leaflet.css').read_text()
     js=(ROOT/'assets/leaflet.js').read_text()
-    fonts=(ROOT/'static/fonts/fonts.css').read_text().replace('.woff2','.ttf')
     title=html.escape(f"Thanh Hóa — {case['area_name'].lower()}")
-    return f'''<!doctype html><html lang="vi" data-view-revision="{int(view_revision)}"><head><meta charset="utf-8"><style>{fonts}
+    return f'''<!doctype html><html lang="vi" data-view-revision="{int(view_revision)}"><head><meta charset="utf-8"><style>
 {css}
 html,body{{margin:0;height:100%;font-family:"Be Vietnam Pro",sans-serif}}#map{{height:100%;min-height:0;background:#e8eeec}}
 .leaflet-container{{font:13px/1.5 "Be Vietnam Pro",sans-serif}}.map-note{{background:white;padding:8px 12px;color:#193c44;max-width:240px;border-radius:4px}}
@@ -62,6 +63,11 @@ html,body{{margin:0;height:100%;font-family:"Be Vietnam Pro",sans-serif}}#map{{h
 </style></head><body><div id="map" role="region" aria-label="Bản đồ khu vực Thanh Hóa và lớp nghi ngập"></div>
 <div id="status">{html.escape(status_message)}</div>
 <script>{js}</script><script>
+// Resolve font URLs from the app document, preserving the Community Cloud prefix.
+const appBase=window.parent.document.baseURI;
+const fontStyle=document.createElement('style');
+fontStyle.textContent=[400,500,600,700].map((weight,i)=>`@font-face{{font-family:"Be Vietnam Pro";font-style:normal;font-weight:${{weight}};font-display:optional;src:url("${{new URL('app/static/fonts/be-vietnam-pro-'+i+'.woff2',appBase).href}}") format("woff2");}}`).join('');
+document.head.appendChild(fontStyle);
 const map=L.map('map',{{scrollWheelZoom:false}}).fitBounds({json.dumps(bounds)},{{padding:[24,24]}});
 window.demoMap=map;
 window.addEventListener('message',event=>{{

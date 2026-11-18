@@ -3,15 +3,21 @@ import time
 import json
 from pathlib import Path
 import streamlit as st
-from pipeline_rtc import catalogue, infer, load_model, model_signature, source_images, EXPORT_VERSION
 from functools import partial
-from bilingual_support import translate, area_name, local_date, localized_map, localized_bundle, message, radar_legend
+from concurrent.futures import ThreadPoolExecutor
 ROOT = Path(__file__).resolve().parent
 if st.query_params.get('demo') == '1' and not st.session_state.get('client_demo_initialized'):
     st.session_state.setdefault('selected_area', 1)
     st.session_state.setdefault('language', 'en')
     st.session_state.client_demo_initialized = True
 language = st.session_state.get('language', 'vi')
+# Send page geometry and styles before importing the ML runtime or emitting widgets.
+# Otherwise the first visible frame uses Streamlit's centered/default layout.
+st.set_page_config(page_title='Vietnam flood map' if language == 'en' else 'Bản đồ ngập Việt Nam', page_icon=':material/water:', layout='wide', initial_sidebar_state='auto')
+st.html(ROOT / 'ui_bilingual.css')
+st.html('<script>' + (ROOT / 'cloud_chrome.js').read_text() + '</script>', unsafe_allow_javascript=True)
+from pipeline_rtc import catalogue, infer, load_model, model_signature, source_images, EXPORT_VERSION
+from bilingual_support import translate, area_name, local_date, localized_map, localized_bundle, message, radar_legend
 language_changed = st.session_state.get('last_language', language) != language
 tr = partial(translate, language=language)
 ui = partial(message, language=language)
@@ -20,9 +26,6 @@ if language_changed:
     st.session_state.pop('workspace-tab', None)
     st.session_state.tab_default = st.session_state.get('logical_tab', 0)
 st.session_state.last_language = language
-st.set_page_config(page_title=tr('Bản đồ ngập Việt Nam'), page_icon=':material/water:', layout='wide', initial_sidebar_state='auto')
-st.html(ROOT / 'ui_bilingual.css')
-st.html('<script>' + (ROOT / 'cloud_chrome.js').read_text() + '</script>', unsafe_allow_javascript=True)
 
 def interaction_controls(language, bounds):
     pan='Bật/tắt kéo bản đồ' if language=='vi' else 'Toggle map interaction'
@@ -49,8 +52,13 @@ def interaction_controls(language, bounds):
 </script>'''
 
 @st.cache_resource
-def model_resource(signature):
-    return load_model(signature)
+def model_future(signature):
+    # Warm weights in a worker while the map is rendered. No predictions or
+    # Streamlit calls run in this worker; all sessions share the same future.
+    executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix='rtc-model')
+    future = executor.submit(load_model, signature)
+    executor.shutdown(wait=False)
+    return future
 
 def vn(value, places=1):
     formatted = f'{value:,.{places}f}'
@@ -64,6 +72,7 @@ cases = catalogue()
 if not cases:
     st.warning(tr('Chưa có cặp ảnh Việt Nam đạt kiểm tra đầu vào. Không thể chạy phân tích bằng ảnh chưa phù hợp.'))
     st.stop()
+pending_model = model_future(signature)
 with st.sidebar:
     with st.container(key='sidebar-layout', gap='small'):
         with st.container(key='brand'):
@@ -112,11 +121,13 @@ if run:
     try:
         started = time.perf_counter()
         with st.spinner(tr('Đang đọc ảnh và tìm các vùng nghi ngập…')):
-            model, device = model_resource(signature)
+            model, device = pending_model.result()
             result = infer(case, model, device)
             result['metadata']['request_to_result_seconds'] = time.perf_counter() - started
         st.session_state.result = result
     except Exception as exc:
+        if pending_model.done() and pending_model.exception() is not None:
+            model_future.clear()
         result = None
         st.session_state.error = str(exc)
 if 'error' in st.session_state:
@@ -128,7 +139,7 @@ with tabs[0]:
         with map_column:
             with st.container(border=True, key='map-panel', gap='xsmall'):
                 show = st.session_state.get('overlay', True)
-                with st.container(key='map-canvas', height='stretch', border=False):
+                with st.container(key='map-canvas', height=440, border=False):
                     st.html(interaction_controls(language, [[case['bounds_wgs84'][1],case['bounds_wgs84'][0]],[case['bounds_wgs84'][3],case['bounds_wgs84'][2]]]), unsafe_allow_javascript=True)
                     st.iframe(localized_map(case, result, show and result is not None, language), height='stretch', alt=tr('Bản đồ Thanh Hóa có địa danh, ranh khu vực khảo sát và lớp AI nghi ngập'))
                 st.html(radar_legend(language))
