@@ -71,12 +71,17 @@ window.addEventListener('message',event=>{{
 const base=L.tileLayer({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
 let loaded=0;base.on('tileload',()=>{{loaded++;document.getElementById('status').style.display='none';}});
 base.on('tileerror',()=>{{if(!loaded)document.getElementById('status').style.display='block';}});
+// Keep the prepared fallback below live tiles: its fixed-resolution labels must
+// never cover or cut labels rendered at the current map zoom.
+const referencePane=map.createPane('reference-basemap');
+referencePane.style.zIndex='190';
+referencePane.style.pointerEvents='none';
 const reference={json.dumps(reference)};
 if(reference){{
  // Community Cloud serves the app under /~/+/. Resolve from its parent document,
  // rather than the outer Cloud shell or about:srcdoc, preserving that prefix.
  const referenceURL=new URL(reference,window.parent.document.baseURI).href;
- L.imageOverlay(referenceURL,{json.dumps(reference_bounds)},{{interactive:false,className:'prepared-basemap'}})
+ L.imageOverlay(referenceURL,{json.dumps(reference_bounds)},{{interactive:false,pane:'reference-basemap',className:'prepared-basemap'}})
   .on('error',function(){{map.removeLayer(this);}}).addTo(map);
 }}
 L.polygon({json.dumps(case['footprint_wgs84'])},{{color:'#11636a',weight:2,fill:false,dashArray:'7 5'}}).addTo(map).bindTooltip({json.dumps(title)},{{sticky:true}});
