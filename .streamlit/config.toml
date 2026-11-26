@@ -67,6 +67,8 @@ toolbarMode = "viewer"
 showSidebarNavigation = false
 
 [server]
+# Compress UI/map deltas as well as HTTP frontend assets.
+enableWebsocketCompression = true
 headless = true
 address = "0.0.0.0"
 port = 8501
