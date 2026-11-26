@@ -37,7 +37,8 @@ class InitialStyles:
 @media(max-width:640px) {
  .stMainBlockContainer { padding:3.5rem 1rem 1rem !important; }
 }
-@media(min-width:576px) {
+/* Streamlit auto-collapses the sidebar at widths <= 768px. */
+@media(min-width:769px) {
  [data-testid="stAppViewContainer"]:not(:has([data-testid="stSidebar"]))
  > div:has(> [data-testid="stMain"]) { margin-left:300px; }
 }
