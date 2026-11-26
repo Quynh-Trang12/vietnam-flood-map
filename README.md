@@ -13,6 +13,8 @@ python -m pip install -r requirements.txt
 python -m streamlit run streamlit_app.py
 ```
 
+The entry point uses `st.App` middleware to gzip frontend JavaScript/CSS and include the existing app stylesheet in the initial HTML. Binary imagery, model files and downloads pass through unchanged. Use `streamlit_app.py` as the deployment entry point.
+
 Open the address printed by Streamlit. The three Thanh Hóa cases and PNG/GeoTIFF/CSV/JSON downloads are available in Vietnamese and English. Inputs and model are bundled; inference does not require access to the original workstation or a GPU. The background is a dated reference snapshot; it is not a flood observation. Attribution is included in maps and `resources/DATA_SOURCE_NOTICE.md`.
 
 ## Deploy on free Streamlit Community Cloud
