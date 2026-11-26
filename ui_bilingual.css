@@ -49,7 +49,7 @@ header[data-testid="stHeader"] { height:0 !important; min-height:0; background:t
 .st-key-map-toolbar { padding:.15rem .2rem; }
 .st-key-map-panel iframe { display:block; border:0; border-radius:.4rem; }
 .st-key-map-panel { padding: calc(-1px + 0.8rem); }
-.st-key-map-canvas { height:clamp(480px, calc(100dvh - 270px), 760px) !important; min-height:0; flex:none; }
+html body :is(.st-key-map-canvas, [data-testid="stLayoutWrapper"]:has(> .st-key-map-canvas)) { height:clamp(480px, calc(100dvh - 270px), 760px) !important; min-height:0; flex:none; }
 .map-legend { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:.5rem 1rem; padding:.55rem .2rem .2rem; color:#3b5264; font-size:.82rem; line-height:1.65; }
 .map-legend > span { display:flex; align-items:flex-start; gap:.4rem; min-width:0; }
 .map-legend i { display:inline-block; flex-shrink:0; margin-top:.28rem; width:.7rem; height:.7rem; background:#06b6d4; border-radius:2px; }
@@ -69,7 +69,7 @@ header[data-testid="stHeader"] { height:0 !important; min-height:0; background:t
  .stMainBlockContainer { padding:3.5rem 1rem 1rem; }
  .st-key-app-header h1 { font-size:1.5rem; }
  .mobile-scope-hint { display:block; margin:.5rem 0 0; font-size:.875rem; line-height:1.6; color:#53697b; }
- .st-key-map-canvas { height:440px !important; }
+ html body :is(.st-key-map-canvas, [data-testid="stLayoutWrapper"]:has(> .st-key-map-canvas)) { height:440px !important; }
  .map-legend { font-size:.8rem; gap:.5rem .8rem; }
 }
 @media(prefers-reduced-motion:no-preference) {
@@ -155,7 +155,7 @@ header[data-testid="stHeader"] { height:0 !important; min-height:0; background:t
 
 /* Separate custom map actions from Leaflet zoom; leave attribution visible below. */
 .st-key-map-canvas { position:relative; }
-.st-key-map-canvas [data-testid="stElementContainer"]:has(.map-compact-controls) {
+.st-key-map-canvas [data-testid="stLayoutWrapper"]:has(> .st-key-map-controls) {
  position:absolute; top:auto; left:auto; right:12px; bottom:64px; z-index:5; width:auto; height:auto;
 }
 .map-compact-controls { display:flex; flex-direction:column; gap:5px; }
@@ -179,3 +179,13 @@ header[data-testid="stHeader"] { height:0 !important; min-height:0; background:t
 .map-compact-controls button::before { content:""; width:22px; height:22px; display:block; background:currentColor; mask-size:contain; mask-repeat:no-repeat; mask-position:center; }
 .map-pan-control::before { mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20aria-hidden%3D%22true%22%3E%3Cpath%20d%3D%22M8%2013V5a1.5%201.5%200%200%201%203%200v6-8a1.5%201.5%200%200%201%203%200v8-5a1.5%201.5%200%200%201%203%200v6-3a1.5%201.5%200%200%201%203%200v7c0%204-2%206-6%206h-2c-2%200-3-1-4-3l-4-5a1.5%201.5%200%200%201%202-2Z%22%2F%3E%3C%2Fsvg%3E"); }
 .map-reset-control::before { mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.8%22%20aria-hidden%3D%22true%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%227%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%222%22%2F%3E%3Cpath%20d%3D%22M12%201v5m0%2012v5M1%2012h5m12%200h5%22%2F%3E%3C%2Fsvg%3E"); }
+
+/* Bootstrap assets have no product content; their lazy placeholders need no row. */
+.st-key-bootstrap-assets, [data-testid="stLayoutWrapper"]:has(> .st-key-bootstrap-assets) { display:none !important; }
+/* Reserve the heading plus subtitle while its single HTML renderer loads. */
+.st-key-title-block { min-height:61.6px; }
+.st-key-title-block h1 { font-size:1.75rem; font-weight:600; }
+@media(max-width:640px) {
+ .st-key-title-block { min-height:108.8px; }
+ .st-key-title-block h1 { font-size:1.5rem; }
+}

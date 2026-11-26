@@ -19,8 +19,9 @@ st.set_page_config(page_title='Vietnam flood map' if language == 'en' else 'Bả
 sidebar_layout = st.sidebar.container(key='sidebar-layout', gap='small')
 # Markdown renders the style with its element. st.html inserts styles in a
 # frontend effect, which can run after the widgets have already been painted.
-st.markdown('<style>' + (ROOT / 'ui_bilingual.css').read_text() + '</style>', unsafe_allow_html=True)
-st.html('<script>' + (ROOT / 'cloud_chrome.js').read_text() + '</script>', unsafe_allow_javascript=True)
+with st.container(key='bootstrap-assets'):
+    st.markdown('<style>' + (ROOT / 'ui_bilingual.css').read_text() + '</style>', unsafe_allow_html=True)
+    st.html('<script>' + (ROOT / 'cloud_chrome.js').read_text() + '</script>', unsafe_allow_javascript=True)
 from pipeline_rtc import catalogue, infer, load_model, model_signature, source_images, EXPORT_VERSION
 from bilingual_support import translate, area_name, local_date, localized_map, localized_bundle, message, radar_legend
 language_changed = st.session_state.get('last_language', language) != language
@@ -102,8 +103,7 @@ with st.container(key='app-header'):
     heading, status = st.columns([3, 2], vertical_alignment='center')
     with heading:
         with st.container(key='title-block', gap='small'):
-            st.title(tr('Bản đồ ngập Việt Nam'))
-            st.html(tr('<div class="workspace-subtitle">Thanh Hóa – Mưa lũ tháng 9/2024</div><p class="mobile-scope-hint">Mở thanh bên từ mép trái để chọn khu vực và chạy phân tích.</p>'))
+            st.html('<h1>' + tr('Bản đồ ngập Việt Nam') + '</h1>' + tr('<div class="workspace-subtitle">Thanh Hóa – Mưa lũ tháng 9/2024</div><p class="mobile-scope-hint">Mở thanh bên từ mép trái để chọn khu vực và chạy phân tích.</p>'))
     with status:
         with st.container(horizontal=True, horizontal_alignment='right', vertical_alignment='center', key='language-controls'):
             st.segmented_control('Language / Ngôn ngữ', ['vi', 'en'], format_func=lambda code: code.upper(), default=None if 'language' in st.session_state else 'vi', required=True, key='language', label_visibility='collapsed', width='content')
@@ -144,7 +144,8 @@ with tabs[0]:
             with st.container(border=True, key='map-panel', gap='xsmall'):
                 show = st.session_state.get('overlay', True)
                 with st.container(key='map-canvas', height=440, border=False):
-                    st.html(interaction_controls(language, [[case['bounds_wgs84'][1],case['bounds_wgs84'][0]],[case['bounds_wgs84'][3],case['bounds_wgs84'][2]]]), unsafe_allow_javascript=True)
+                    with st.container(key='map-controls'):
+                        st.html(interaction_controls(language, [[case['bounds_wgs84'][1],case['bounds_wgs84'][0]],[case['bounds_wgs84'][3],case['bounds_wgs84'][2]]]), unsafe_allow_javascript=True)
                     st.iframe(localized_map(case, result, show and result is not None, language), height='stretch', alt=tr('Bản đồ Thanh Hóa có địa danh, ranh khu vực khảo sát và lớp AI nghi ngập'))
                 st.html(radar_legend(language))
             with st.container(key='map-note'):
