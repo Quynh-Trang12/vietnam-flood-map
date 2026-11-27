@@ -9,7 +9,7 @@ from rasterio.transform import array_bounds
 from demo_io import png_bytes
 from map_assets import prepared_map
 ROOT=Path(__file__).parent
-TILE_URL="https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
+TILE_URL="https://tile.openstreetmap.de/{z}/{x}/{y}.png"
 
 
 def overlay(result):
@@ -68,7 +68,7 @@ window.addEventListener('message',event=>{{
  if(event.source===window.parent && event.origin===window.parent.location.origin && event.data?.type==='flood-map-reset')
   map.fitBounds({json.dumps(bounds)},{{padding:[24,24],animate:false}});
 }});
-const base=L.tileLayer({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
+const base=L.tileLayer({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Tiles: <a href="https://openstreetmap.de/" target="_blank">OSM Deutschland</a> · Reference style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
 let loaded=0;base.on('tileload',()=>{{loaded++;document.getElementById('status').style.display='none';}});
 base.on('tileerror',()=>{{if(!loaded)document.getElementById('status').style.display='block';}});
 // Keep the prepared fallback below live tiles: its fixed-resolution labels must
