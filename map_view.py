@@ -2,6 +2,7 @@
 import base64
 import html
 import json
+from urllib.parse import quote
 from pathlib import Path
 import numpy as np
 from rasterio.warp import calculate_default_transform,reproject,Resampling
@@ -9,7 +10,7 @@ from rasterio.transform import array_bounds
 from demo_io import png_bytes
 from map_assets import prepared_map
 ROOT=Path(__file__).parent
-TILE_URL="https://tile.openstreetmap.de/{z}/{x}/{y}.png"
+TILE_URL="https://api.maptiler.com/maps/streets-v4/256/{z}/{x}/{y}.png"
 
 
 def overlay(result):
@@ -38,7 +39,9 @@ def colorize(warped,footprint,flood_class):
     return rgba
 
 
-def map_html(case,result=None,show_prediction=True,view_revision=0):
+def map_html(case,result=None,show_prediction=True,view_revision=0,*,maptiler_api_key=""):
+    key = str(maptiler_api_key or "").strip()
+    tile_url = TILE_URL + "?key=" + quote(key, safe="") if key else ""
     west,south,east,north=case['bounds_wgs84']
     bounds=[[south,west],[north,east]]
     image='';image_bounds=bounds
@@ -68,9 +71,24 @@ window.addEventListener('message',event=>{{
  if(event.source===window.parent && event.origin===window.parent.location.origin && event.data?.type==='flood-map-reset')
   map.fitBounds({json.dumps(bounds)},{{padding:[24,24],animate:false}});
 }});
-const base=L.tileLayer({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Tiles: <a href="https://openstreetmap.de/" target="_blank">OSM Deutschland</a> · Reference style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
-let loaded=0;base.on('tileload',()=>{{loaded++;document.getElementById('status').style.display='none';}});
-base.on('tileerror',()=>{{if(!loaded)document.getElementById('status').style.display='block';}});
+const tileURL={json.dumps(tile_url)};
+if(tileURL){{
+ const base=L.tileLayer(tileURL,{{minZoom:1,maxZoom:18,crossOrigin:true,
+  attribution:'© <a href="https://www.maptiler.com/copyright/" target="_blank" rel="noopener">MapTiler</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Reference style © <a href="https://www.openstreetmap.fr/" target="_blank" rel="noopener">OpenStreetMap France</a>'}}).addTo(map);
+ let loaded=0;
+ base.on('tileload',()=>{{loaded++;document.getElementById('status').style.display='none';}});
+ base.on('tileerror',()=>{{if(!loaded)document.getElementById('status').style.display='block';}});
+ const logo=L.control({{position:'bottomleft'}});
+ logo.onAdd=()=>{{
+  const link=L.DomUtil.create('a');link.href='https://www.maptiler.com/';
+  link.target='_blank';link.rel='noopener';link.setAttribute('aria-label','MapTiler');
+  const image=document.createElement('img');image.src='https://api.maptiler.com/resources/logo.svg';
+  image.alt='MapTiler logo';image.style.width='100px';image.style.height='auto';
+  link.appendChild(image);return link;
+ }};logo.addTo(map);
+}}else{{
+ document.getElementById('status').style.display='block';
+}}
 // Keep the prepared fallback below live tiles: its fixed-resolution labels must
 // never cover or cut labels rendered at the current map zoom.
 const referencePane=map.createPane('reference-basemap');

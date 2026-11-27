@@ -513,8 +513,8 @@ def local_date(value,language):
     if language=='vi':return value
     return datetime.strptime(value,'%d/%m/%Y %H:%M').strftime('%d %b %Y %H:%M')
 
-def localized_map(case,result,show_prediction,language,view_revision=0):
-    markup=map_html(case,result,show_prediction)
+def localized_map(case,result,show_prediction,language,view_revision=0,*,maptiler_api_key=""):
+    markup=map_html(case,result,show_prediction,view_revision,maptiler_api_key=maptiler_api_key)
     if language=='en':
         markup=markup.replace('Nền bản đồ xung quanh chưa tải được; nền khu vực phân tích và kết quả vẫn được giữ.', 'The surrounding basemap could not load; the analysis-area background and prediction are retained.')
     if language=='en':

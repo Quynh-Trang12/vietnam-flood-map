@@ -21,6 +21,11 @@ if language_changed:
     st.session_state.tab_default = st.session_state.get('logical_tab', 0)
 st.session_state.last_language = language
 st.set_page_config(page_title=tr('Bản đồ ngập Việt Nam'), page_icon=':material/water:', layout='wide', initial_sidebar_state='auto')
+# The browser receives a public, origin-restricted tile key; never commit it.
+try:
+    maptiler_api_key = str(st.secrets.get('MAPTILER_API_KEY', '') or '').strip()
+except FileNotFoundError:
+    maptiler_api_key = ''
 st.html(ROOT / 'ui_bilingual.css')
 st.html('<script>' + (ROOT / 'cloud_chrome.js').read_text() + '</script>', unsafe_allow_javascript=True)
 
@@ -130,7 +135,7 @@ with tabs[0]:
                 show = st.session_state.get('overlay', True)
                 with st.container(key='map-canvas', height='stretch', border=False):
                     st.html(interaction_controls(language, [[case['bounds_wgs84'][1],case['bounds_wgs84'][0]],[case['bounds_wgs84'][3],case['bounds_wgs84'][2]]]), unsafe_allow_javascript=True)
-                    st.iframe(localized_map(case, result, show and result is not None, language), height='stretch', alt=tr('Bản đồ Thanh Hóa có địa danh, ranh khu vực khảo sát và lớp AI nghi ngập'))
+                    st.iframe(localized_map(case, result, show and result is not None, language, maptiler_api_key=maptiler_api_key), height='stretch', alt=tr('Bản đồ Thanh Hóa có địa danh, ranh khu vực khảo sát và lớp AI nghi ngập'))
                 st.html(radar_legend(language))
             with st.container(key='map-note'):
                 st.caption(tr('Phóng to hoặc kéo bản đồ để nhận biết địa điểm. Khu vực phân tích dùng nền tham chiếu đã chuẩn bị; bản đồ xung quanh cần Internet. © OpenStreetMap / OpenStreetMap France.'))

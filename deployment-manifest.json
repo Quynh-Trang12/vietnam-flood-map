@@ -36,20 +36,20 @@
       "bytes": 11742
     },
     "map_view.py": {
-      "sha256": "16920d08c3b70ae334faad3750295e612e34af650a56c6736001f7b38c819f38",
-      "bytes": 6085
+      "sha256": "b473954b8d1646defe65682a94558648c921bc606f8849d1fa250ad4acdb5a5a",
+      "bytes": 6925
     },
     "map_export.py": {
       "sha256": "d1c047897f6e17945fc23445700d3f7810196eafa8030c98bce931a3726bd39a",
       "bytes": 10450
     },
     "app_bilingual.py": {
-      "sha256": "390804afa2741cf48fafa04c791f7fe6e551cb01684d3d51fa07c60072319f6d",
-      "bytes": 14649
+      "sha256": "e82ba7c498d627a14c25a6493ff7a957099192eae7d8d19f985664b6119cebf3",
+      "bytes": 14900
     },
     "bilingual_support.py": {
-      "sha256": "0855d127e6b98c58d2f27de1b694d8301a841a93a776a94e4f49a81307253879",
-      "bytes": 75776
+      "sha256": "bf8f3cc35114e8e217130e3b9bd9335d06aea52d9debfcba5cd812b4d6edb65f",
+      "bytes": 75846
     },
     "pipeline_rtc.py": {
       "sha256": "0b2701a4b96385542a2214221534158170921fc1438027d2669a012acaa469ec",
@@ -242,6 +242,10 @@
     "static/maps/EMSR754-8-1.webp": {
       "sha256": "59f69707e1d0ee72f8a6ce254065abed1836722e274372501e8af42e701664da",
       "bytes": 699818
+    },
+    "README.md": {
+      "sha256": "23ebf2e6a7563e4974705e29298a3636d098f80c78e2c91e11cd09f5f221af4d",
+      "bytes": 3284
     }
   }
 }
