@@ -10,6 +10,7 @@ from demo_io import png_bytes
 from map_assets import prepared_map
 ROOT=Path(__file__).parent
 TILE_URL="https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
+FALLBACK_TILE_URL="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 
 
 def overlay(result):
@@ -48,7 +49,12 @@ def map_html(case,result=None,show_prediction=True,view_revision=0):
         preview=ROOT/f"static/maps/{case['key']}-preview.webp"
         extension="webp" if (ROOT/f"static/maps/{case['key']}.webp").is_file() else "png"
         filename=preview.name if preview.is_file() else f"{case['key']}.{extension}"
-        reference=f"app/static/maps/{filename}?v={asset[1]['sha256'][:12]}"
+        # Keep the prepared reference available even when Cloud static requests
+        # or the external tile service stall. The same image bytes travel with
+        # the map document; no predictions or labels are embedded here.
+        reference_path = ROOT / 'static/maps' / filename
+        mime = 'image/webp' if reference_path.suffix == '.webp' else 'image/png'
+        reference = f'data:{mime};base64,' + base64.b64encode(reference_path.read_bytes()).decode()
         w,s,e,n=asset[1]['bounds_wgs84'];reference_bounds=[[s,w],[n,e]]
     if result is not None and show_prediction:image,image_bounds=overlay(result)
     status_message=('Nền bản đồ xung quanh chưa tải được; nền khu vực phân tích và kết quả vẫn được giữ.' if reference else 'Nền địa danh chưa tải được. Kiểm tra Internet; ranh khu vực và lớp kết quả vẫn được giữ.')
@@ -74,7 +80,28 @@ window.addEventListener('message',event=>{{
  if(event.source===window.parent && event.origin===window.parent.location.origin && event.data?.type==='flood-map-reset')
   map.fitBounds({json.dumps(bounds)},{{padding:[24,24],animate:false}});
 }});
-const base=L.tileLayer({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
+// Retry only visible tiles once through the independent standard OSM endpoint.
+// A stalled request also falls back; there is no prefetch or retry loop.
+const ResilientTiles=L.TileLayer.extend({{
+ createTile(coords,done){{
+  const tile=document.createElement('img');tile.alt='';tile.setAttribute('role','presentation');
+  let fallback=false,settled=false,timer;
+  const finish=error=>{{if(settled)return;settled=true;clearTimeout(timer);done(error,tile);}};
+  const retry=()=>{{
+   clearTimeout(timer);
+   if(fallback){{finish(new Error('Basemap tile unavailable'));return;}}
+   fallback=true;
+   tile.src=L.Util.template({json.dumps(FALLBACK_TILE_URL)},coords);
+   timer=setTimeout(()=>finish(new Error('Basemap tile timeout')),8000);
+  }};
+  tile.onload=()=>finish(null);tile.onerror=retry;
+  tile._cancelBasemapLoad=()=>{{settled=true;clearTimeout(timer);tile.onload=null;tile.onerror=null;}};
+  tile.src=this.getTileUrl(coords);timer=setTimeout(retry,5000);
+  return tile;
+ }}
+}});
+const base=new ResilientTiles({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Reference/primary style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
+base.on('tileunload',event=>event.tile._cancelBasemapLoad?.());
 let loaded=0;base.on('tileload',()=>{{loaded++;document.getElementById('status').style.display='none';}});
 base.on('tileerror',()=>{{if(!loaded)document.getElementById('status').style.display='block';}});
 // Keep the prepared fallback below live tiles: its fixed-resolution labels must
@@ -84,11 +111,12 @@ referencePane.style.zIndex='190';
 referencePane.style.pointerEvents='none';
 const reference={json.dumps(reference)};
 if(reference){{
- // Community Cloud serves the app under /~/+/. Resolve from its parent document,
- // rather than the outer Cloud shell or about:srcdoc, preserving that prefix.
- const referenceURL=new URL(reference,window.parent.document.baseURI).href;
- L.imageOverlay(referenceURL,{json.dumps(reference_bounds)},{{interactive:false,pane:'reference-basemap',className:'prepared-basemap'}})
-  .on('error',function(){{map.removeLayer(this);}}).addTo(map);
+ // The prepared reference is part of this document, independent of HTTP tiles.
+ L.imageOverlay(reference,{json.dumps(reference_bounds)},{{interactive:false,pane:'reference-basemap',className:'prepared-basemap'}})
+  .on('error',function(){{
+   document.getElementById('status').textContent='Không tải được nền tham chiếu. Hãy tải lại bản đồ; đường viền không phải bản đồ nền.';
+   document.getElementById('status').style.display='block';
+  }}).addTo(map);
 }}
 L.polygon({json.dumps(case['footprint_wgs84'])},{{color:'#11636a',weight:2,fill:false,dashArray:'7 5'}}).addTo(map).bindTooltip({json.dumps(title)},{{sticky:true}});
 const image={json.dumps(image)};

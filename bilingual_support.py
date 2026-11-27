@@ -517,6 +517,7 @@ def localized_map(case,result,show_prediction,language,view_revision=0):
     markup=map_html(case,result,show_prediction)
     if language=='en':
         markup=markup.replace('Nền bản đồ xung quanh chưa tải được; nền khu vực phân tích và kết quả vẫn được giữ.', 'The surrounding basemap could not load; the analysis-area background and prediction are retained.')
+        markup=markup.replace('Không tải được nền tham chiếu. Hãy tải lại bản đồ; đường viền không phải bản đồ nền.', 'The reference background could not load. Reload the map; the outline is not a basemap.')
     if language=='en':
         old=html.escape(f"Thanh Hóa — {case['area_name'].lower()}")
         new=html.escape(f"Thanh Hóa — {area_name(case['area_name'],language)}")
