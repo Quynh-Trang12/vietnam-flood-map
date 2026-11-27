@@ -42,7 +42,11 @@ need their own key allowing `localhost` or `127.0.0.1`; do not broaden the produ
 key for local tests. Missing/invalid keys, quota exhaustion or network failures
 leave the existing dated reference background and show the basemap warning.
 There is no automatic provider switch or upgrade. Keep the MapTiler Free plan,
-logo and attribution. Maps use the documented 256px Streets v4 raster endpoint.
+logo and attribution. Maps use the Dataviz Light v4 raster style, 256px WebP tiles (no Retina multiplier).
+The neutral background is intended for flood-class overlays and place context,
+rather than navigation or satellite imagery. This uses the existing Leaflet
+renderer; no vector/WebGL/3D runtime is added. All map styles still share the
+provider infrastructure, so this choice does not establish a higher uptime SLA.
 
 - API key restrictions: https://docs.maptiler.com/guides/developer/credentials/api-key/
 - Leaflet integration: https://docs.maptiler.com/leaflet/examples/raster-tiles-in-leaflet-js/

@@ -10,7 +10,9 @@ from rasterio.transform import array_bounds
 from demo_io import png_bytes
 from map_assets import prepared_map
 ROOT=Path(__file__).parent
-TILE_URL="https://api.maptiler.com/maps/streets-v4/256/{z}/{x}/{y}.png"
+# A quiet analytical background keeps flood classes prominent; WebP reduces
+# raster transfer while retaining the current Leaflet 256px grid.
+TILE_URL="https://api.maptiler.com/maps/dataviz-v4-light/256/{z}/{x}/{y}.webp"
 
 
 def overlay(result):
