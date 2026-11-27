@@ -73,3 +73,13 @@ root, without waiting for the custom app header to arrive. This avoids switching
 header height and main padding after initial content appears; the completed UI
 and the shared production stylesheet are unchanged. Its deployed score must be
 checked separately from the raster-basemap measurement.
+
+UI fonts are now genuine WOFF2 files with versioned theme URLs. Their complete
+character coverage, glyph outlines and advance widths match the original TTFs;
+the TTF files remain available for exports and the legacy map renderer. The v2
+startup script preloads the three observed above-fold weights (400/500/600) and
+discovers the Material Symbols font URL from Streamlit's own stylesheet. Repeated
+script execution does not add duplicate preload links. This changes font format
+and discovery order, not typeface or icon behavior. Deployed Speed Index/TBT
+effects require a subsequent measurement; reduced font size alone is not proof
+of a higher Lighthouse score.
