@@ -10,7 +10,6 @@ from demo_io import png_bytes
 from map_assets import prepared_map
 ROOT=Path(__file__).parent
 TILE_URL="https://a.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png"
-FALLBACK_TILE_URL="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 
 
 def overlay(result):
@@ -46,22 +45,16 @@ def map_html(case,result=None,show_prediction=True,view_revision=0):
     asset=prepared_map(case['key'])
     reference='';reference_bounds=bounds
     if asset is not None:
-        preview=ROOT/f"static/maps/{case['key']}-preview.webp"
         extension="webp" if (ROOT/f"static/maps/{case['key']}.webp").is_file() else "png"
-        filename=preview.name if preview.is_file() else f"{case['key']}.{extension}"
-        # Keep the prepared reference available even when Cloud static requests
-        # or the external tile service stall. The same image bytes travel with
-        # the map document; no predictions or labels are embedded here.
-        reference_path = ROOT / 'static/maps' / filename
-        mime = 'image/webp' if reference_path.suffix == '.webp' else 'image/png'
-        reference = f'data:{mime};base64,' + base64.b64encode(reference_path.read_bytes()).decode()
+        reference=f"app/static/maps/{case['key']}.{extension}?v={asset[1]['sha256'][:12]}"
         w,s,e,n=asset[1]['bounds_wgs84'];reference_bounds=[[s,w],[n,e]]
     if result is not None and show_prediction:image,image_bounds=overlay(result)
     status_message=('Nền bản đồ xung quanh chưa tải được; nền khu vực phân tích và kết quả vẫn được giữ.' if reference else 'Nền địa danh chưa tải được. Kiểm tra Internet; ranh khu vực và lớp kết quả vẫn được giữ.')
     css=(ROOT/'assets/leaflet.css').read_text()
     js=(ROOT/'assets/leaflet.js').read_text()
+    fonts=(ROOT/'static/fonts/fonts.css').read_text().replace('.woff2','.ttf')
     title=html.escape(f"Thanh Hóa — {case['area_name'].lower()}")
-    return f'''<!doctype html><html lang="vi" data-view-revision="{int(view_revision)}"><head><meta charset="utf-8"><style>
+    return f'''<!doctype html><html lang="vi" data-view-revision="{int(view_revision)}"><head><meta charset="utf-8"><style>{fonts}
 {css}
 html,body{{margin:0;height:100%;font-family:"Be Vietnam Pro",sans-serif}}#map{{height:100%;min-height:0;background:#e8eeec}}
 .leaflet-container{{font:13px/1.5 "Be Vietnam Pro",sans-serif}}.map-note{{background:white;padding:8px 12px;color:#193c44;max-width:240px;border-radius:4px}}
@@ -69,60 +62,13 @@ html,body{{margin:0;height:100%;font-family:"Be Vietnam Pro",sans-serif}}#map{{h
 </style></head><body><div id="map" role="region" aria-label="Bản đồ khu vực Thanh Hóa và lớp nghi ngập"></div>
 <div id="status">{html.escape(status_message)}</div>
 <script>{js}</script><script>
-// Resolve font URLs from the app document, preserving the Community Cloud prefix.
-const appBase=window.parent.document.baseURI;
-const fontStyle=document.createElement('style');
-fontStyle.textContent=[400,500,600,700].map((weight,i)=>`@font-face{{font-family:"Be Vietnam Pro";font-style:normal;font-weight:${{weight}};font-display:optional;src:url("${{new URL('app/static/fonts/be-vietnam-pro-'+i+'.woff2',appBase).href}}") format("woff2");}}`).join('');
-document.head.appendChild(fontStyle);
 const map=L.map('map',{{scrollWheelZoom:false}}).fitBounds({json.dumps(bounds)},{{padding:[24,24]}});
 window.demoMap=map;
 window.addEventListener('message',event=>{{
  if(event.source===window.parent && event.origin===window.parent.location.origin && event.data?.type==='flood-map-reset')
   map.fitBounds({json.dumps(bounds)},{{padding:[24,24],animate:false}});
 }});
-// Retry only visible tiles once through the independent standard OSM endpoint.
-// A stalled request also falls back; there is no prefetch or retry loop.
-const ResilientTiles=L.TileLayer.extend({{
- createTile(coords,done){{
-  const tile=document.createElement('img');tile.alt='';tile.setAttribute('role','presentation');
-  let settled=false,primaryFailed=false,fallbackFailed=false,usingFallback=false;
-  let timer,fallbackTimer,probe;
-  const stopProbe=()=>{{
-   clearTimeout(fallbackTimer);
-   if(probe){{probe.onload=null;probe.onerror=null;probe.src=L.Util.emptyImageUrl;}}
-  }};
-  const finish=error=>{{
-   if(settled)return;settled=true;clearTimeout(timer);stopProbe();done(error,tile);
-  }};
-  const fallbackError=()=>{{
-   fallbackFailed=true;stopProbe();
-   if(primaryFailed)finish(new Error('Basemap sources unavailable'));
-   else document.getElementById('status').style.display='block';
-  }};
-  const retry=()=>{{
-   clearTimeout(timer);if(probe||settled)return;
-   // Probe separately: a slow primary must continue if the backup cannot load.
-   probe=new Image();
-   probe.onload=()=>{{
-    if(settled)return;clearTimeout(fallbackTimer);usingFallback=true;
-    tile.src=probe.src;
-   }};
-   probe.onerror=fallbackError;
-   probe.src=L.Util.template({json.dumps(FALLBACK_TILE_URL)},coords);
-   fallbackTimer=setTimeout(fallbackError,8000);
-  }};
-  tile.onload=()=>finish(null);
-  tile.onerror=()=>{{
-   if(usingFallback){{finish(new Error('Basemap image unavailable'));return;}}
-   primaryFailed=true;if(fallbackFailed)finish(new Error('Basemap sources unavailable'));else retry();
-  }};
-  tile._cancelBasemapLoad=()=>{{settled=true;clearTimeout(timer);stopProbe();tile.onload=null;tile.onerror=null;}};
-  tile.src=this.getTileUrl(coords);timer=setTimeout(retry,5000);
-  return tile;
- }}
-}});
-const base=new ResilientTiles({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Reference/primary style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
-base.on('tileunload',event=>event.tile._cancelBasemapLoad?.());
+const base=L.tileLayer({json.dumps(TILE_URL)},{{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap contributors</a> · Style © <a href="https://www.openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'}}).addTo(map);
 let loaded=0;base.on('tileload',()=>{{loaded++;document.getElementById('status').style.display='none';}});
 base.on('tileerror',()=>{{if(!loaded)document.getElementById('status').style.display='block';}});
 // Keep the prepared fallback below live tiles: its fixed-resolution labels must
@@ -132,12 +78,11 @@ referencePane.style.zIndex='190';
 referencePane.style.pointerEvents='none';
 const reference={json.dumps(reference)};
 if(reference){{
- // The prepared reference is part of this document, independent of HTTP tiles.
- L.imageOverlay(reference,{json.dumps(reference_bounds)},{{interactive:false,pane:'reference-basemap',className:'prepared-basemap'}})
-  .on('error',function(){{
-   document.getElementById('status').textContent='Không tải được nền tham chiếu. Hãy tải lại bản đồ; đường viền không phải bản đồ nền.';
-   document.getElementById('status').style.display='block';
-  }}).addTo(map);
+ // Community Cloud serves the app under /~/+/. Resolve from its parent document,
+ // rather than the outer Cloud shell or about:srcdoc, preserving that prefix.
+ const referenceURL=new URL(reference,window.parent.document.baseURI).href;
+ L.imageOverlay(referenceURL,{json.dumps(reference_bounds)},{{interactive:false,pane:'reference-basemap',className:'prepared-basemap'}})
+  .on('error',function(){{map.removeLayer(this);}}).addTo(map);
 }}
 L.polygon({json.dumps(case['footprint_wgs84'])},{{color:'#11636a',weight:2,fill:false,dashArray:'7 5'}}).addTo(map).bindTooltip({json.dumps(title)},{{sticky:true}});
 const image={json.dumps(image)};

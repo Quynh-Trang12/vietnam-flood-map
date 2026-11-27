@@ -67,8 +67,6 @@ toolbarMode = "viewer"
 showSidebarNavigation = false
 
 [server]
-# Compress UI/map deltas as well as HTTP frontend assets.
-enableWebsocketCompression = true
 headless = true
 address = "0.0.0.0"
 port = 8501
@@ -81,24 +79,24 @@ gatherUsageStats = false
 
 [[theme.fontFaces]]
 family = "Be Vietnam Pro"
-url = "app/static/fonts/be-vietnam-pro-0.woff2"
+url = "app/static/fonts/be-vietnam-pro-0.ttf"
 weight = "400"
 style = "normal"
 
 [[theme.fontFaces]]
 family = "Be Vietnam Pro"
-url = "app/static/fonts/be-vietnam-pro-1.woff2"
+url = "app/static/fonts/be-vietnam-pro-1.ttf"
 weight = "500"
 style = "normal"
 
 [[theme.fontFaces]]
 family = "Be Vietnam Pro"
-url = "app/static/fonts/be-vietnam-pro-2.woff2"
+url = "app/static/fonts/be-vietnam-pro-2.ttf"
 weight = "600"
 style = "normal"
 
 [[theme.fontFaces]]
 family = "Be Vietnam Pro"
-url = "app/static/fonts/be-vietnam-pro-3.woff2"
+url = "app/static/fonts/be-vietnam-pro-3.ttf"
 weight = "700"
 style = "normal"
