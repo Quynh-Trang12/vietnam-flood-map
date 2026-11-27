@@ -244,16 +244,16 @@
       "bytes": 699818
     },
     "README.md": {
-      "sha256": "1b1b655e3e8dc12cdbe518866c125d86763add772d0e1df66bb8f4e5f345edc9",
-      "bytes": 4508
+      "sha256": "8f78ea2f30d8783a9948b98f6278c0541475122604fa0b96ff6d1a1945be7c3d",
+      "bytes": 4882
     },
     "map_view_sdk.py": {
       "sha256": "3df04b9d329c5713327dd325609405e47d67854167dfa695cdffd2eb4dcd741c",
       "bytes": 7359
     },
     "streamlit_sdk_trial.py": {
-      "sha256": "6d767687ecdb5b6106025cc4a136fd988303f572b0336df96c18bb3488319bc9",
-      "bytes": 1705
+      "sha256": "5a36e552b8b602a017e7d3fda3ebb725377db0a24ec9a0ed333e8a9732c7a4f5",
+      "bytes": 2172
     }
   }
 }

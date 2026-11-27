@@ -67,3 +67,9 @@ Missing keys or failed tiles show an error, without changing provider or billing
 
 This change has browser functional checks; a deployed Lighthouse score must be
 measured after committing the files and rebooting the separate v2 app.
+
+The v2 entry also applies the existing layout CSS to Streamlit's early native
+root, without waiting for the custom app header to arrive. This avoids switching
+header height and main padding after initial content appears; the completed UI
+and the shared production stylesheet are unchanged. Its deployed score must be
+checked separately from the raster-basemap measurement.
