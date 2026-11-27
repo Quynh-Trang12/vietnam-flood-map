@@ -1,4 +1,4 @@
-"""Opt-in SDK/vector renderer; production map_view.py remains the control arm.
+"""Opt-in SDK renderer with a lightweight raster basemap.
 
 Uses the same categorical overlay conversion. No model inference runs here.
 """
@@ -11,7 +11,7 @@ SDK_VERSION = "v5.0.0"
 
 def map_html(case, result=None, show_prediction=True, view_revision=0, *,
              maptiler_api_key="", language="vi"):
-    """Render the analytical map with a vector basemap and an image overlay."""
+    """Render MapTiler's pre-rendered context and the unchanged analytical overlay."""
     west, south, east, north = case['bounds_wgs84']
     ring = [[lon, lat] for lat, lon in case['footprint_wgs84']]
     if ring[0] != ring[-1]:
@@ -51,6 +51,9 @@ def map_html(case, result=None, show_prediction=True, view_revision=0, *,
 
 TEMPLATE = r'''<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://cdn.maptiler.com" crossorigin>
+<link rel="preconnect" href="https://api.maptiler.com" crossorigin>
+<link rel="modulepreload" href="https://cdn.maptiler.com/maptiler-sdk-js/__VERSION__/maptiler-sdk.min.mjs">
 <link rel="stylesheet" href="https://cdn.maptiler.com/maptiler-sdk-js/__VERSION__/maptiler-sdk.css">
 <style>
 html,body,#map{margin:0;width:100%;height:100%;background:#e8eeec}
@@ -78,7 +81,14 @@ if(!cfg.key){status.textContent=cfg.missing;}else{
   gl.getExtension('WEBGL_lose_context')?.loseContext();
   const sdk=await import('https://cdn.maptiler.com/maptiler-sdk-js/__VERSION__/maptiler-sdk.min.mjs');
   sdk.config.apiKey=cfg.key;
-  const map=new sdk.Map({container:'map',style:'dataviz-v4-light',
+  // The quiet Dataviz style is unchanged. Server-rendered WebP avoids vector
+  // geometry, sprite and glyph downloads/decoding for this small context map.
+  const style={version:8,sources:{'context-basemap':{
+   type:'raster',tileSize:256,minzoom:0,maxzoom:20,
+   tiles:['https://api.maptiler.com/maps/dataviz-v4-light/256/{z}/{x}/{y}.webp?key='+encodeURIComponent(cfg.key)],
+   attribution:'© <a href="https://www.maptiler.com/copyright/" target="_blank" rel="noopener">MapTiler</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>'}},
+   layers:[{id:'context-basemap',type:'raster',source:'context-basemap',paint:{'raster-fade-duration':0}}]};
+  const map=new sdk.Map({container:'map',style,
    bounds:cfg.bounds,fitBoundsOptions:{padding:24,duration:0},
    projection:'mercator',terrain:false,geolocate:false,geolocateControl:false,
    navigationControl:false,scaleControl:false,fullscreenControl:false,
@@ -101,16 +111,17 @@ if(!cfg.key){status.textContent=cfg.missing;}else{
     paint:{'line-color':'#11636a','line-width':2,'line-dasharray':[3.5,2.5]}});
    if(cfg.prediction){
     map.addSource('flood-prediction',{type:'image',url:cfg.prediction,coordinates:cfg.coordinates});
-    const labelLayer=map.getStyle().layers.find(layer=>layer.type==='symbol')?.id;
     map.addLayer({id:'flood-prediction',type:'raster',source:'flood-prediction',
-     paint:{'raster-opacity':1,'raster-fade-duration':0,'raster-resampling':'nearest'}},labelLayer);
+     paint:{'raster-opacity':1,'raster-fade-duration':0,'raster-resampling':'nearest'}},'analysis-footprint');
    }
   });
-  map.once('idle',()=>{
-   if(!map.getLayer('analysis-footprint'))return;
+  const ready=()=>{
+   if(!map.getLayer('analysis-footprint') || !map.areTilesLoaded() || window.__mapTrialStats.errors)return;
    status.hidden=true;window.demoMapReady=true;
    window.__mapTrialStats.readyMs=performance.now();
-  });
+   map.off('idle',ready);
+  };
+  map.on('idle',ready);
  }catch(error){status.textContent=error.message==='webgl2-unavailable'?cfg.unsupported:cfg.failure;
   window.__mapTrialStats.errors++;}
 }

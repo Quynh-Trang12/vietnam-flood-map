@@ -51,3 +51,19 @@ provider infrastructure, so this choice does not establish a higher uptime SLA.
 - API key restrictions: https://docs.maptiler.com/guides/developer/credentials/api-key/
 - Leaflet integration: https://docs.maptiler.com/leaflet/examples/raster-tiles-in-leaflet-js/
 - Free plan/quota behavior: https://www.maptiler.com/cloud/pricing/
+
+## Separate SDK app (v2)
+
+`streamlit_sdk_trial.py` is the entry point for the separate SDK app. Keep
+`streamlit_app.py` as the existing app's entry point. The SDK app needs the same
+Secret and its own hostname in the key's Allowed HTTP Origins.
+
+The SDK now renders the same Dataviz Light basemap from 256px WebP tiles rather
+than downloading vector geometry, glyphs and sprites. The SDK, controls, analysis
+boundary and exact prediction image/coordinates remain in use. Raster labels can
+look softer at fractional zoom or on high-density screens; the target desktop
+uses 100% scaling. MapTiler branding and OpenStreetMap attribution remain visible.
+Missing keys or failed tiles show an error, without changing provider or billing.
+
+This change has browser functional checks; a deployed Lighthouse score must be
+measured after committing the files and rebooting the separate v2 app.
