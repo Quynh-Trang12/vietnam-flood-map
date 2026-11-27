@@ -85,17 +85,38 @@ window.addEventListener('message',event=>{{
 const ResilientTiles=L.TileLayer.extend({{
  createTile(coords,done){{
   const tile=document.createElement('img');tile.alt='';tile.setAttribute('role','presentation');
-  let fallback=false,settled=false,timer;
-  const finish=error=>{{if(settled)return;settled=true;clearTimeout(timer);done(error,tile);}};
-  const retry=()=>{{
-   clearTimeout(timer);
-   if(fallback){{finish(new Error('Basemap tile unavailable'));return;}}
-   fallback=true;
-   tile.src=L.Util.template({json.dumps(FALLBACK_TILE_URL)},coords);
-   timer=setTimeout(()=>finish(new Error('Basemap tile timeout')),8000);
+  let settled=false,primaryFailed=false,fallbackFailed=false,usingFallback=false;
+  let timer,fallbackTimer,probe;
+  const stopProbe=()=>{{
+   clearTimeout(fallbackTimer);
+   if(probe){{probe.onload=null;probe.onerror=null;probe.src=L.Util.emptyImageUrl;}}
   }};
-  tile.onload=()=>finish(null);tile.onerror=retry;
-  tile._cancelBasemapLoad=()=>{{settled=true;clearTimeout(timer);tile.onload=null;tile.onerror=null;}};
+  const finish=error=>{{
+   if(settled)return;settled=true;clearTimeout(timer);stopProbe();done(error,tile);
+  }};
+  const fallbackError=()=>{{
+   fallbackFailed=true;stopProbe();
+   if(primaryFailed)finish(new Error('Basemap sources unavailable'));
+   else document.getElementById('status').style.display='block';
+  }};
+  const retry=()=>{{
+   clearTimeout(timer);if(probe||settled)return;
+   // Probe separately: a slow primary must continue if the backup cannot load.
+   probe=new Image();
+   probe.onload=()=>{{
+    if(settled)return;clearTimeout(fallbackTimer);usingFallback=true;
+    tile.src=probe.src;
+   }};
+   probe.onerror=fallbackError;
+   probe.src=L.Util.template({json.dumps(FALLBACK_TILE_URL)},coords);
+   fallbackTimer=setTimeout(fallbackError,8000);
+  }};
+  tile.onload=()=>finish(null);
+  tile.onerror=()=>{{
+   if(usingFallback){{finish(new Error('Basemap image unavailable'));return;}}
+   primaryFailed=true;if(fallbackFailed)finish(new Error('Basemap sources unavailable'));else retry();
+  }};
+  tile._cancelBasemapLoad=()=>{{settled=true;clearTimeout(timer);stopProbe();tile.onload=null;tile.onerror=null;}};
   tile.src=this.getTileUrl(coords);timer=setTimeout(retry,5000);
   return tile;
  }}
